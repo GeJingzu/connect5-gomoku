@@ -14,4 +14,23 @@ public class Gomokulogic {
             System.out.println();
         }
     }
+    // Method to put a piece on the board
+    public boolean placePiece(int r, int c, int color) {
+        // Check if the position is inside the 15x15 board
+        if (r >= 0 && r < 15 && c >= 0 && c < 15) {
+
+            // Only place if the spot is empty (0)
+            if (board[r][c] == 0) {
+                board[r][c] = color;
+                return true;
+            } else {
+                System.out.println("Error: Spot already taken.");
+            }
+        } else {
+            System.out.println("Error: Out of bounds.");
+        }
+
+        return false; // Failed to place
+    }
+
 }
