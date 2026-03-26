@@ -63,6 +63,30 @@ public class Gomokulogic {
             else break;
         }
         if (count >= 5) return true;
+        //Diagonal
+        count = 1;
+        for (int i = 1; r + i < 15 && c + i < 15; i++) {
+            if (board[r + i][c + i] == color) count++;
+            else break;
+        }
+        for (int i = 1; r - i >= 0 && c - i >= 0; i--) {
+            if (board[r - i][c - i] == color) count++;
+            else break;
+        }
+        if (count >= 5) return true;
+
+        //Diagonal
+        count = 1;
+        for (int i = 1; r + i < 15 && c - i >= 0; i++) {
+            if (board[r + i][c - i] == color) count++;
+            else break;
+        }
+        for (int i = 1; r - i >= 0 && c + i < 15; i++) {
+            if (board[r - i][c + i] == color) count++;
+            else break;
+        }
+        if (count >= 5) return true;
+
         return false;
     }
 }
