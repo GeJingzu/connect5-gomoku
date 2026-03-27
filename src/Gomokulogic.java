@@ -89,4 +89,22 @@ public class Gomokulogic {
 
         return false;
     }
+    // Get what is at (r, c)
+    public int getPiece(int r, int c) {
+        if (r >= 0 && r < 15 && c >= 0 && c < 15) {
+            return board[r][c];
+        }
+        return -1;
+    }
+    // Check if the board is full
+    public boolean isFull() {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (board[i][j] == 0) {
+                    return false; // Found an empty spot, not full
+                }
+            }
+        }
+        return true;
+    }
 }
