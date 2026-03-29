@@ -1,3 +1,5 @@
+//Jingzu Ge
+
 public class Gomokulogic {
     //Define the size of the chessboard
     private int size = 15;
@@ -106,5 +108,13 @@ public class Gomokulogic {
             }
         }
         return true;
+    }
+    // Clear the board for a new game
+    public void resetBoard() {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                board[i][j] = 0;
+            }
+        }
     }
 }
