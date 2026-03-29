@@ -1,70 +1,82 @@
-// --- 1. 游戏状态初始化 [cite: 14, 19] ---
+/**
+ * Game Controller - Managed by Member C
+ * Responsibilities: Game state, turn management, and timekeeping.
+ */
+
+// --- 1. Game State Definitions ---
 const GameState = {
     PLAYING: 'playing',
+    PAUSED: 'paused',
     FINISHED: 'finished'
 };
 
 let currentState = GameState.PLAYING;
-let currentPlayer = 1; // 1代表黑方，2代表白方
+let currentPlayer = 1; // 1 for Black, 2 for White [cite: 13]
 let timer = null;
-let timeLeft = 30; // 设定每步倒计时
+let timeLeft = 30; // 30 seconds per turn [cite: 14]
 
-// --- 2. 核心状态管理逻辑  ---
+// --- 2. Turn Management ---
 
 /**
- * 切换回合函数
- * 当落子合法且未结束时，由组员 B 的交互逻辑调用此函数
+ * Switches the turn between players.
+ * This should be called after a valid move is validated by Member A.
  */
 function switchTurn() {
     if (currentState !== GameState.PLAYING) return;
 
-    // 切换玩家
+    // Toggle player: 1 -> 2 or 2 -> 1
     currentPlayer = (currentPlayer === 1) ? 2 : 1;
 
-    // 重置倒计时
-    resetTimer();
+    console.log(`Current Turn: Player ${currentPlayer}`);
 
-    console.log(`现在轮到玩家 ${currentPlayer} 落子`);
+    // Reset the countdown for the new turn [cite: 14]
+    resetTimer();
 }
 
-// --- 3. 倒计时与超时逻辑  ---
+// --- 3. Timekeeping & Timeout Logic ---
 
+/**
+ * Starts the countdown timer for the current turn.
+ */
 function startTimer() {
-    // 确保不会有多个定时器同时运行
-    clearInterval(timer);
+    // Clear any existing timer to prevent memory leaks or speed-ups
+    if (timer) clearInterval(timer);
 
     timer = setInterval(() => {
         timeLeft--;
 
-        // 此处应调用组员 B 写的 UI 更新函数，显示剩余秒数
+        // Update UI - Calls the UI update function (to be implemented by Member B)
         if (typeof updateTimerUI === "function") {
             updateTimerUI(timeLeft);
         }
 
-        // 超时检测
+        // Check for timeout loss [cite: 14]
         if (timeLeft <= 0) {
             handleTimeout();
         }
     }, 1000);
 }
 
+/**
+ * Resets the timer back to the initial value.
+ */
 function resetTimer() {
     timeLeft = 30;
     startTimer();
 }
 
 /**
- * 超时判负逻辑
+ * Handles the scenario when a player runs out of time.
  */
 function handleTimeout() {
     clearInterval(timer);
     currentState = GameState.FINISHED;
 
-    const loser = (currentPlayer === 1) ? "黑方" : "白方";
-    const winner = (currentPlayer === 1) ? "白方" : "黑方";
+    // The current player loses due to timeout [cite: 14]
+    const winner = (currentPlayer === 1) ? "White" : "Black";
 
-    alert(`时间到！${loser}超时，恭喜${winner}获胜！`);
+    alert(`Time is up! ${winner} wins the game!`);
 }
 
-// 初始化启动
+// Initialize the game timer on load
 startTimer();
