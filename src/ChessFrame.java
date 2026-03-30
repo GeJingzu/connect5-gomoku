@@ -42,11 +42,27 @@ class BoardPanel extends JPanel implements MouseListener{
                 board[i][j] = 0;
             }
         }
-        isBlackTurn = true;
+        isBlackTurn = true; //Let the black side take the lead again.
+        repaint();
     }
 
 
-}
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g); //Background security refresh
+        g.setColor(Color.BLACK);
+
+        //Draw a rectangular box
+        g.drawRect(170,118,380,380); //Make a rectangle
+        g.drawRect(19,36,100,26); //Make a rectangle
+        g.drawRect(140,36,40,26); //Make a rectangle
+        g.drawRect(217,70,200,28); //Make a rectangle
+        g.drawRect(418,70,200,28); //Make a rectangle
+        g.drawRect(19,110,85,26); //Make a rectangle
+        g.drawRect(15,487,95,26); //Make a rectangle
+        g.drawRect(18,185,120,26); //Make a rectangle
+
+    }
 
 
 
