@@ -42,4 +42,9 @@ function handleMove(row, col) {
         if (GameState.isMergeEnabled) {
             applyMergeLogic(row, col);
         }
+            // 4. Call Jingzu Ge's winning algorithm
+            // if (checkWin(row, col)) { endGame(); return; }
+
+            switchTurn();
+}
 
