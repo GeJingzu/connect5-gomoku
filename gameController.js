@@ -28,3 +28,10 @@ function handleMove(row, col) {
     if (GameState.gameStatus !== 'PLAYING') return;
     if (GameState.board[row][col] !== 0) return; // Cell already occupied
 
+    // 1. Record move for Undo functionality
+    GameState.moveHistory.push({
+        row: row,
+        col: col,
+        player: GameState.currentPlayer
+    });
+
