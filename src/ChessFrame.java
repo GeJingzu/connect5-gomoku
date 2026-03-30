@@ -26,6 +26,20 @@ public class ChessFrame extends JFrame {
 //A panel class responsible for drawing checkerboards and handling mouse events.
 class BoardPanel extends JPanel implements MouseListener{
     private static final int SIZE = 19; //Chessboard 19*19
+    private final int[] [] board = new int[SIZE][SIZE]; //0=empty,1=black,2=white.
+    private boolean isBlackTurn = true; //Current black side
+    private int cellSize = 380/18; //Size of each grid
+    private boolean canPlay = false;
+    public BoardPanel() {
+        setBackground(Color.WHITE);
+        this.addMouseListener(this);
+    }
+
+    //Clear the chessboard and refresh the interface
+    public void clearBorad(){
+
+    }
+
 
 }
 
