@@ -99,7 +99,51 @@ class BoardPanel extends JPanel implements MouseListener{
                 }
             }
         }
+        //Draw title and time bar labels
+        g.setColor(Color.RED);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+        g.drawString("Five chess game", 20, 55);
+        g.drawString("Help", 140, 55);
+        g.drawString("START", 20, 130);
+        g.drawString("RESTART THE GAME", 20, 205);
 
+        g.setColor(Color.BLUE);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+        g.drawString("END THE GAME", 19, 508);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+        g.drawString("REPENTANCE:", 70, 320);
+        g.drawString("ADMIT DEFEAT:", 70, 280);
+        g.setColor(Color.BLUE);
+        g.drawOval(60,295,100,40);
+        g.drawOval(60,252,100,40);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD | Font.ITALIC, 12));
+        g.setColor(Color.GRAY);
+        g.drawString("WHITE TIME:", 220, 90);
+        g.drawString("BLACK TIME:", 420, 90);
+
+
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 
