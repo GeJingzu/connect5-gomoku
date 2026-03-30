@@ -40,6 +40,9 @@ public class Test {
                 continue;
             }else{
                 System.out.println("Your name is:" + name);
+                JOptionPane.showMessageDialog(null,"Your name is:" + name);
+                JOptionPane.showMessageDialog(null,"You can play chess now, but our game is still semi-finished, so many functions are not actually installed. We are sorry for this");
+                break;
             }
         }
     }
