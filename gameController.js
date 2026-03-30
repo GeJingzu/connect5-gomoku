@@ -47,4 +47,14 @@ function handleMove(row, col) {
 
             switchTurn();
 }
+//Undo the last move (Stage 2 Feature)
+//Uses a stack structure to revert the board state.
+function undoMove() {
+    if (GameState.moveHistory.length === 0) return;
 
+    const lastMove = GameState.moveHistory.pop();
+    GameState.board[lastMove.row][lastMove.col] = 0; // Clear the cell
+
+// Revert turn and reset timer
+    switchTurn();
+}
