@@ -18,9 +18,16 @@ public class ChessFrame extends JFrame {
         this.setVisible(true); //Set whether the form is displayed
 
     }
+
     public static void main(String[] args) {
         new ChessFrame();
     }
+}
+//A panel class responsible for drawing checkerboards and handling mouse events.
+class BoardPanel extends JPanel implements MouseListener{
+    private static final int SIZE = 19; //Chessboard 19*19
+
+}
 
 
 
