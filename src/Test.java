@@ -15,5 +15,26 @@ public class Test {
             JOptionPane.showMessageDialog(cf,"We need say goodbye if you want leave.");
             System.exit(0);
         }
+        if(result==2){
+            JOptionPane.showMessageDialog(cf,"We need say goodbye if you want leave.");
+            System.exit(0);
+        }
+
+
+        String name;
+        while(true){
+            name = JOptionPane.showInputDialog("Input your name,please."); //Input box message.
+            if(name==null){
+                int result2 = JOptionPane.showConfirmDialog(cf,"Do you want to exit input?");
+                if(result2==2){
+                    continue;
+                } else if(result2==0){
+                    System.exit(0);
+                }
+                else if(result2==1){
+                    continue;
+                }
+            }
+        }
     }
 }
