@@ -35,6 +35,12 @@ public class Test {
                     continue;
                 }
             }
+            if(name.trim().isEmpty()){
+                JOptionPane.showMessageDialog(null,"Please input your name again.");
+                continue;
+            }else{
+                System.out.println("Your name is:" + name);
+            }
         }
     }
 }
