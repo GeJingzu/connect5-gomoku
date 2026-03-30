@@ -58,3 +58,9 @@ function undoMove() {
 // Revert turn and reset timer
     switchTurn();
 }
+
+//Apply the "Merge Pieces" special rule (Stage 2 Feature)
+function applyMergeLogic(row, col) {
+    // Placeholder for the specific merge rules you and Jingzu Ge define
+    console.log(`Checking merge logic for move at [${row}, ${col}]`);
+}
