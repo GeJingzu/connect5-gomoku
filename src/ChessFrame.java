@@ -62,7 +62,47 @@ class BoardPanel extends JPanel implements MouseListener{
         g.drawRect(15,487,95,26); //Make a rectangle
         g.drawRect(18,185,120,26); //Make a rectangle
 
+        //Draw a checkerboard grid
+        int cellSize = 380 / 18;
+        for (int i = 0; i < 19; i++) {
+            int y = 118 + i * cellSize;
+            g.drawLine(170, y, 550, y);
+        }
+        for (int i = 0; i < 19; i++) {
+            int x = 170 + i * cellSize;
+            g.drawLine(x, 118, x, 498);
+        }
+
+        // Draw star position
+        g.fillOval(483,179,4,4);//Filled circle (for drawing chess pieces)
+        g.fillOval(231,179,4,4);//Filled circle (for drawing chess pieces)
+        g.fillOval(231,431,4,4);//Filled circle (for drawing chess pieces)
+        g.fillOval(483,431,4,4);//Filled circle (for drawing chess pieces)
+        g.fillOval(358,305,4,4);//Filled circle (for drawing chess pieces)
+        g.fillOval(358,179,4,4);//Filled circle (for drawing chess pieces)
+        g.fillOval(358,431,4,4);//Filled circle (for drawing chess pieces)
+        g.fillOval(231,305,4,4);//Filled circle (for drawing chess pieces)
+        g.fillOval(483,305,4,4);//Filled circle (for drawing chess pieces)
+
+        //Draw chess pieces
+        for(int r =0;r < SIZE;r++){
+            for(int c =0;c < SIZE;c++){
+                if(board[r][c] != 0){
+                    int x = 170 + c * cellSize;
+                    int y = 118 + r * cellSize;
+                    if (board[r][c] == 1) g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.fillOval(x - 10, y - 10, 20, 20);
+                    g.setColor(Color.BLACK);
+                    g.drawOval(x - 10, y - 10, 20, 20);
+
+                }
+            }
+        }
+
+
     }
+
 
 
 
