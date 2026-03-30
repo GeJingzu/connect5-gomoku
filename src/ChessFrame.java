@@ -36,7 +36,7 @@ class BoardPanel extends JPanel implements MouseListener{
     }
 
     //Clear the chessboard and refresh the interface
-    public void clearBorad(){
+    public void clearBoard(){
         for(int i =0; i<SIZE; i++){
             for(int j= 0; j< SIZE; j++){
                 board[i][j] = 0;
@@ -128,6 +128,73 @@ class BoardPanel extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+        System.out.println(mouseX + " " + mouseY);
+        //'START THE GAME' button
+        if(e.getX()>=19 && e.getX()<= 104 && e.getY()>=111 && e.getY()<=135){
+            JOptionPane.showMessageDialog(this,"Then the game starts now!");
+            if (e.getX() >= 19 && e.getX() <= 104 && e.getY() >= 111 && e.getY() <= 135) {
+                clearBoard();
+                canPlay = true; // Start the game to play chess
+            }
+        }
+        //'REPENTANCE' button
+        if (e.getX()>=63 && e.getX()<= 154 && e.getY()>=298 && e.getY()<=324) {
+            JOptionPane.showMessageDialog(this,"Sorry, this feature is not actually installed");
+        }
+        //'HELP' button
+        if(e.getX()>=140 && e.getX()<= 180 && e.getY()>=35 && e.getY()<=61){
+            JOptionPane.showMessageDialog(this,"The core goal of Gobang is to put five pieces of the same color in the horizontal, vertical or diagonal direction. It seems simple, but the layout and rhythm are very important in the high-level game. The following are systematic strategies and techniques, which are divided into two levels: tactics and Strategies");
+        }
+        //'END THE GAME'BUTTON
+        if(e.getX()>=15 && e.getX()<= 101 && e.getY()>=488 && e.getY()<=512) {
+            JOptionPane.showMessageDialog(this, "Goodbye~");
+            System.exit(0);
+        }
+        //'RESTART THE GAME' button
+        if(e.getX()>=16 && e.getX()<= 139 && e.getY()>=184 && e.getY()<=209){
+            JOptionPane.showMessageDialog(this,"Then the chessboard will be cleared");
+            clearBoard();
+        }
+        //'ADMIT DEFEAT' button
+        if(e.getX()>=60 && e.getX()<= 155 && e.getY()>=258 && e.getY()<=287){
+            int result2 = JOptionPane.showConfirmDialog(this,"Are you sure you want to admit defeat?");
+            System.out.println("result2="+result2);
+            if(result2==0){
+                JOptionPane.showMessageDialog(this,"Okay, so the game is banned");
+                clearBoard();
+                canPlay = false;
+            }else if(result2==1){
+                JOptionPane.showMessageDialog(this,"I see, so keep playing.");
+                canPlay = true;
+            }else{
+                JOptionPane.showMessageDialog(this,"I see, so keep playing.");
+            }
+
+        }
+
+
+        if (mouseX < 170 || mouseX > 550 || mouseY < 118 || mouseY > 498) {
+            System.out.println("Click outside the chessboard, invalid");
+            return;
+        }
+        if (!canPlay) {
+            System.out.println("The game has not started or has ended. You can't leave it alone!");
+            JOptionPane.showMessageDialog(this, "The game has not started or has ended!");
+            return;
+        }
+        int col = Math.round((mouseX - 170) / (float) cellSize);
+        int row = Math.round((mouseY - 118) / (float) cellSize);
+
+        // Can only drop in the empty position
+        if (board[row][col] != 0) {
+            System.out.println("There are already chess pieces here!");
+            return;
+        }
+        board[row][col] = isBlackTurn ? 1 : 2;
+        isBlackTurn = !isBlackTurn; // Switch player
+        repaint();
 
     }
     @Override
