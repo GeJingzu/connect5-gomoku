@@ -22,3 +22,9 @@ function startGame() {
     GameState.moveHistory = []; // Clear history for new game
     resetTurnTimer();
 }
+// Logic for placing a piece
+//To be called by Yunlong Wang(UI) when a grid is clicked.
+function handleMove(row, col) {
+    if (GameState.gameStatus !== 'PLAYING') return;
+    if (GameState.board[row][col] !== 0) return; // Cell already occupied
+
