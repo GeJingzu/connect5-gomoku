@@ -15,3 +15,10 @@ const GameState = {
     moveHistory: [], // Stack to store history for "Undo" functionality
     isMergeEnabled: false // Toggle for the "Merge Pieces" mechanic
 };
+//Start or Reset the game
+function startGame() {
+    GameState.gameStatus = 'PLAYING';
+    GameState.currentPlayer = 1;
+    GameState.moveHistory = []; // Clear history for new game
+    resetTurnTimer();
+}
