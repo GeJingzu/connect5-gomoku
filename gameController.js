@@ -64,3 +64,10 @@ function applyMergeLogic(row, col) {
     // Placeholder for the specific merge rules you and Jingzu Ge define
     console.log(`Checking merge logic for move at [${row}, ${col}]`);
 }
+//Manage turn switching and countdown
+function switchTurn() {
+    clearInterval(GameState.timer);
+    GameState.currentPlayer = (GameState.currentPlayer === 1) ? 2 : 1;
+    GameState.remainingTime = 30;
+    startCountdown();
+}
