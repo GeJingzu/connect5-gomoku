@@ -80,3 +80,10 @@ function startCountdown() {
         }
     }, 1000);
 }
+//Handle game end by timeout
+function handleTimeout() {
+    clearInterval(GameState.timer);
+    GameState.gameStatus = 'ENDED';
+    const winner = (GameState.currentPlayer === 1) ? 'White' : 'Black';
+    console.log(`Timeout! ${winner} wins.`);
+}
