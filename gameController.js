@@ -35,3 +35,11 @@ function handleMove(row, col) {
         player: GameState.currentPlayer
     });
 
+       // 2. Update board data
+        GameState.board[row][col] = GameState.currentPlayer;
+
+        // 3. Stage 2: Check for Merge mechanic
+        if (GameState.isMergeEnabled) {
+            applyMergeLogic(row, col);
+        }
+
