@@ -71,3 +71,12 @@ function switchTurn() {
     GameState.remainingTime = 30;
     startCountdown();
 }
+function startCountdown() {
+    GameState.timer = setInterval(() => {
+        GameState.remainingTime--;
+        // UI update call for Yunlong Wang goes here
+        if (GameState.remainingTime <= 0) {
+            handleTimeout();
+        }
+    }, 1000);
+}
