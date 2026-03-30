@@ -25,10 +25,10 @@ public class ChessFrame extends JFrame {
 }
 //A panel class responsible for drawing checkerboards and handling mouse events.
 class BoardPanel extends JPanel implements MouseListener{
-    private static final int SIZE = 19; //Chessboard 19*19
+    private static final int SIZE = 15; //Chessboard 19*19
     private final int[] [] board = new int[SIZE][SIZE]; //0=empty,1=black,2=white.
     private boolean isBlackTurn = true; //Current black side
-    private int cellSize = 380/18; //Size of each grid
+    private int cellSize = 380/(SIZE-1); //Size of each grid
     private boolean canPlay = false;
     public BoardPanel() {
         setBackground(Color.WHITE);
@@ -63,26 +63,26 @@ class BoardPanel extends JPanel implements MouseListener{
         g.drawRect(18,185,120,26); //Make a rectangle
 
         //Draw a checkerboard grid
-        int cellSize = 380 / 18;
-        for (int i = 0; i < 19; i++) {
+        int cellSize = 380 / (SIZE-1);
+        for (int i = 0; i < SIZE; i++) {
             int y = 118 + i * cellSize;
             g.drawLine(170, y, 550, y);
         }
-        for (int i = 0; i < 19; i++) {
+        for (int i = 0; i < SIZE; i++) {
             int x = 170 + i * cellSize;
             g.drawLine(x, 118, x, 498);
         }
 
         // Draw star position
-        g.fillOval(483,179,4,4);//Filled circle (for drawing chess pieces)
-        g.fillOval(231,179,4,4);//Filled circle (for drawing chess pieces)
-        g.fillOval(231,431,4,4);//Filled circle (for drawing chess pieces)
-        g.fillOval(483,431,4,4);//Filled circle (for drawing chess pieces)
-        g.fillOval(358,305,4,4);//Filled circle (for drawing chess pieces)
-        g.fillOval(358,179,4,4);//Filled circle (for drawing chess pieces)
-        g.fillOval(358,431,4,4);//Filled circle (for drawing chess pieces)
-        g.fillOval(231,305,4,4);//Filled circle (for drawing chess pieces)
-        g.fillOval(483,305,4,4);//Filled circle (for drawing chess pieces)
+        int[] starPoints = {3, 7, 11};
+
+        for (int r : starPoints) {
+            for (int c : starPoints) {
+                int x = 170 + c * cellSize;
+                int y = 118 + r * cellSize;
+                g.fillOval(x - 2, y - 2, 4, 4);
+            }
+        }
 
         //Draw chess pieces
         for(int r =0;r < SIZE;r++){
