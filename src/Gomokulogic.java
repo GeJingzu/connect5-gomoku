@@ -1,5 +1,7 @@
 //Jingzu Ge
 
+import java.util.Random;
+
 public class Gomokulogic {
     //Define the size of the chessboard
     private int size = 15;
@@ -93,6 +95,23 @@ public class Gomokulogic {
         }
         if (count >= 5) return true;
         return false;
+    }
+    // Easy AI: find a random empty spot to move
+    public int[] easyAIMove(int aiColor) {
+        Random rand = new Random();
+        int r, c;
+
+        // Keep trying random positions until we find an empty one
+        while (true) {
+            r = rand.nextInt(15); // Random number between 0-14
+            c = rand.nextInt(15);
+
+            if (board[r][c] == 0) {
+                board[r][c] = aiColor;
+                // Return the coordinates so the UI knows where to draw the piece
+                return new int[]{r, c};
+            }
+        }
     }
     // Get what is at (r, c)
     public int getPiece(int r, int c) {
