@@ -38,4 +38,16 @@ public class Test {
         boolean win2 = game.checkWin(0, 4, 1);
         System.out.println(win2); // Expected: true
     }
+    //Check piece merge mode
+    public static void testMergeMode() {
+        Gomokulogic game = new Gomokulogic();
+        game.gameMode = 1; // Enable merge mode
+
+        game.placePiece(5, 5, 2);
+
+        game.placePiece(5, 5, 2);
+
+        int val = game.getPiece(5, 5);
+        System.out.println((val == 12)); // Expected: true
+    }
 }
