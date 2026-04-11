@@ -22,4 +22,20 @@ public class Test {
         boolean res3 = game.placePiece(-1, 0, 1);
         System.out.println("Test out of bounds: " + !res3); // Expected: true
     }
+    // Check horizontal win logic
+    public static void testWinLogic() {
+        Gomokulogic game = new Gomokulogic();
+
+        game.placePiece(0, 0, 1);
+        game.placePiece(0, 1, 1);
+        game.placePiece(0, 2, 1);
+        game.placePiece(0, 3, 1);
+
+        boolean win1 = game.checkWin(0, 3, 1);
+        System.out.println(win1); // Expected: true
+
+        game.placePiece(0, 4, 1);
+        boolean win2 = game.checkWin(0, 4, 1);
+        System.out.println(win2); // Expected: true
+    }
 }
