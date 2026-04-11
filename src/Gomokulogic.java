@@ -1,5 +1,6 @@
 //Jingzu Ge
 
+import javax.swing.*;
 import java.util.Random;
 
 public class Gomokulogic {
@@ -8,6 +9,7 @@ public class Gomokulogic {
     private int[][] board;
 
     public int gameMode = 0;// 0: Classic, 1: Merging Mode
+
     //Consteuctor
     public Gomokulogic() {
         board = new int[size][size];
@@ -31,6 +33,10 @@ public class Gomokulogic {
             if (board[r][c] == 0) {
                 board[r][c] = color;
                 return true;
+            } else if (gameMode == 1 && board[r][c] == color) {
+                board[r][c] = color + 10;
+                System.out.println("Success: Merged.");
+                return true;
             } else {
                 System.out.println("Error: Spot already taken.");
             }
@@ -40,11 +46,13 @@ public class Gomokulogic {
 
         return false; // Failed to place
     }
+
     private boolean isPlayer(int val, int color) {
         // If color is 1, this returns true for 1 and 11
         // If color is 2, this returns true for 2 and 12
         return val == color || val == (color + 10);
     }
+
     // Check if the game is over
     public boolean checkWin(int r, int c, int color) {
         int count;
@@ -55,7 +63,7 @@ public class Gomokulogic {
             else break;
         }
         for (int i = c - 1; i >= 0; i--) {
-            if (isPlayer(board[r][i], color) count++;
+            if (isPlayer(board[r][i], color)) count++;
             else break;
         }
         if (count >= 5) return true;
@@ -63,22 +71,22 @@ public class Gomokulogic {
         //Vertical
         count = 1;
         for (int i = r + 1; i < 15; i++) {
-            if (isPlayer(board[i][c], color) count++;
+            if (isPlayer(board[i][c], color)) count++;
             else break;
         }
         for (int i = r - 1; i >= 0; i--) {
-            if (isPlayer(board[i][c], color) count++;
+            if (isPlayer(board[i][c], color)) count++;
             else break;
         }
         if (count >= 5) return true;
         //Diagonal
         count = 1;
         for (int i = 1; r + i < 15 && c + i < 15; i++) {
-            if (isPlayer(board[r + i][c - i], color) count++;
+            if (isPlayer(board[r + i][c + i], color)) count++;
             else break;
         }
         for (int i = 1; r - i >= 0 && c - i >= 0; i--) {
-            if (isPlayer(board[r - i][c + i], color) count++;
+            if (isPlayer(board[r - i][c - i], color))  count++;
             else break;
         }
         if (count >= 5) return true;
@@ -86,33 +94,32 @@ public class Gomokulogic {
         //Diagonal
         count = 1;
         for (int i = 1; r + i < 15 && c - i >= 0; i++) {
-            if (board[r + i][c - i] == color) count++;
+            if (isPlayer(board[r + i][c - i] , color)) count++;
             else break;
         }
         for (int i = 1; r - i >= 0 && c + i < 15; i++) {
-            if (board[r - i][c + i] == color) count++;
+            if (isPlayer(board[r - i][c + i] , color)) count++;
             else break;
         }
         if (count >= 5) return true;
         return false;
     }
+
     // Easy AI: find a random empty spot to move
     public int[] easyAIMove(int aiColor) {
         Random rand = new Random();
         int r, c;
-
-        // Keep trying random positions until we find an empty one
         while (true) {
-            r = rand.nextInt(15); // Random number between 0-14
+            r = rand.nextInt(15);
             c = rand.nextInt(15);
 
             if (board[r][c] == 0) {
                 board[r][c] = aiColor;
-                // Return the coordinates so the UI knows where to draw the piece
                 return new int[]{r, c};
             }
         }
     }
+
     // Get what is at (r, c)
     public int getPiece(int r, int c) {
         if (r >= 0 && r < 15 && c >= 0 && c < 15) {
@@ -120,6 +127,7 @@ public class Gomokulogic {
         }
         return -1;
     }
+
     // Check if the board is full
     public boolean isFull() {
         for (int i = 0; i < 15; i++) {
@@ -131,6 +139,7 @@ public class Gomokulogic {
         }
         return true;
     }
+
     // Clear the board for a new game
     public void resetBoard() {
         for (int i = 0; i < 15; i++) {
