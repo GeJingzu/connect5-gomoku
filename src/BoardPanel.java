@@ -45,11 +45,25 @@ public BoardPanel() {
     }
 
     private void checkWinOrDraw(int row, int col, int color){
-    if (logic.checkWin(row, col, color)){
+    if (logic.checkWin(row, col, color)) {
         canPlay = false;
         String winner = (color == 1) ? "Black" : "White";
-        int result = JOptionPane.showConfirmDialog(this,winner + "side wins!\nStart over?","Game Over",JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, winner + "side wins!\nStart over?", "Game Over", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            clearBoard();
+            startNewGame();
+        }
+    }else if (logic.isFull()) {
+        canPlay = false;
+        int result = JOptionPane.showConfirmDialog(this,
+                "Draw! Board is full.\nStart over?",
+                "Game Over",
+                JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            clearBoard();
+            startNewGame();
+        }
+    }
+    }
 
-    }
-    }
 }
