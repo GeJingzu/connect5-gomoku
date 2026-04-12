@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class MergeSystemTest {
 
@@ -19,16 +20,16 @@ public class MergeSystemTest {
     @Test
     @DisplayName("Empty position cannot merge")
     public void testEmptyCannotMerge() {
-        assertFalse(mergeSystem.canMerge(board, 7, 7, 1),
-                "Empty position should not be able to merge");
+        assertFalse("Empty position should not be able to merge",
+                mergeSystem.canMerge(board, 7, 7, 1));
     }
 
     @Test
     @DisplayName("Single piece cannot merge (need 3 consecutive)")
     public void testSingleCannotMerge() {
         board[7][7] = 1;
-        assertFalse(mergeSystem.canMerge(board, 7, 7, 1),
-                "Single piece should not be able to merge");
+        assertFalse("Single piece should not be able to merge",
+                mergeSystem.canMerge(board, 7, 7, 1));
     }
 
     @Test
@@ -36,8 +37,8 @@ public class MergeSystemTest {
     public void testTwoCannotMerge() {
         board[7][6] = 1;
         board[7][7] = 1;
-        assertFalse(mergeSystem.canMerge(board, 7, 7, 1),
-                "2 consecutive pieces should not be able to merge");
+        assertFalse("2 consecutive pieces should not be able to merge",
+                mergeSystem.canMerge(board, 7, 7, 1));
     }
     @Test
     @DisplayName("Horizontal 3 consecutive can merge")
@@ -46,10 +47,10 @@ public class MergeSystemTest {
         board[7][6] = 1;
         board[7][7] = 1;
 
-        assertTrue(mergeSystem.canMerge(board, 7, 6, 1),
-                "Middle of horizontal 3 can merge");
-        assertTrue(mergeSystem.canMerge(board, 7, 7, 1),
-                "Edge of horizontal 3 can also merge");
+        assertTrue("Middle of horizontal 3 can merge",
+                mergeSystem.canMerge(board, 7, 6, 1));
+        assertTrue("Edge of horizontal 3 can also merge",
+                mergeSystem.canMerge(board, 7, 7, 1));
     }
 
     @Test
@@ -59,8 +60,8 @@ public class MergeSystemTest {
         board[6][7] = 1;
         board[7][7] = 1;
 
-        assertTrue(mergeSystem.canMerge(board, 6, 7, 1),
-                "Vertical 3 can merge");
+        assertTrue("Vertical 3 can merge",
+                mergeSystem.canMerge(board, 6, 7, 1));
     }
     @Test
     @DisplayName("Diagonal 3 consecutive can merge")
@@ -69,8 +70,8 @@ public class MergeSystemTest {
         board[6][6] = 1;
         board[7][7] = 1;
 
-        assertTrue(mergeSystem.canMerge(board, 6, 6, 1),
-                "Diagonal 3 can merge");
+        assertTrue("Diagonal 3 can merge",
+                mergeSystem.canMerge(board, 6, 6, 1));
     }
 
     @Test
@@ -81,8 +82,8 @@ public class MergeSystemTest {
         board[7][7] = 1;
         board[7][8] = 1;
 
-        assertTrue(mergeSystem.canMerge(board, 7, 6, 1),
-                "4 consecutive can merge");
+        assertTrue("4 consecutive can merge",
+                mergeSystem.canMerge(board, 7, 6, 1));
     }
     @Test
     @DisplayName("Execute merge captures surrounding enemy pieces")
@@ -135,6 +136,32 @@ public class MergeSystemTest {
         }
         assertTrue("Should return correct coordinates of captured piece", found);
     }
+    @Test
+    @DisplayName("Merge returns empty list when no enemy pieces")
+    public void testMergeNoEnemy() {
+        board[7][5] = 1;
+        board[7][6] = 1;
+        board[7][7] = 1;
+        // No white pieces around
 
+        List<int[]> captured = mergeSystem.executeMerge(board, 7, 6, 1);
+
+        assertTrue("Should return empty list when no enemy pieces", captured.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Merge at boundary does not go out of bounds")
+    public void testMergeAtBoundary() {
+        // 3 consecutive at corner
+        board[0][0] = 1;
+        board[0][1] = 1;
+        board[0][2] = 1;
+
+        // Should not throw exception
+        assertDoesNotThrow(() -> {
+            boolean can = mergeSystem.canMerge(board, 0, 1, 1);
+            List<int[]> cap = mergeSystem.executeMerge(board, 0, 1, 1);
+        }, "Merge at boundary should not go out of bounds");
+    }
 
 }
