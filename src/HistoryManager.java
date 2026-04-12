@@ -1,28 +1,22 @@
+import java.util.Stack;
+
 //History manager for undo/redo functionality
 // Uses two stacks to track game moves
 public class HistoryManager {
-    public double getStepCount() {
-    }
 
-    //Represent a single game step/move
-    public static class Step{
+    //Represents a single game step/move
+
+    public static class Step {
         public final int row;
-
-        //Column position
         public final int col;
-
-        //Player who made this move (BLACK or WHITE)
         public final int player;
-
-        // Board state BEFORE this move was made
         public final int[][] boardBefore;
 
-        //Creates a new step record
+         //Creates a new step record
          // @param row Row where piece was placed
-         //@param col Column where piece was placed
-         //@param player Player who made the move
+         // @param col Column where piece was placed
+         // @param player Player who made the move
          //@param board Current board state (will be deep copied)
-
         public Step(int row, int col, int player, int[][] board) {
             this.row = row;
             this.col = col;
@@ -34,10 +28,11 @@ public class HistoryManager {
             }
         }
     }
+
     //Stack for undo operations (stores completed moves)
     private Stack<Step> undoStack;
 
-    //Stack for redo operations (stores undone moves)
+    // Stack for redo operations (stores undone moves)
     private Stack<Step> redoStack;
 
     //Creates a new history manager
@@ -45,12 +40,13 @@ public class HistoryManager {
         undoStack = new Stack<>();
         redoStack = new Stack<>();
     }
-    //Records a new move
-     //Clears redo stack when new move is made
-     //@param row Row of move
-     //@param col Column of move
-     //@param player Player making move
-     //@param currentBoard Board state before move
+
+      // Records a new move
+      //lears redo stack when new move is made
+      // @param row Row of move
+      //@param col Column of move
+      // @param player Player making move
+      //@param currentBoard Board state before move
     public void recordMove(int row, int col, int player, int[][] currentBoard) {
         // New move clears redo history
         redoStack.clear();
@@ -58,7 +54,7 @@ public class HistoryManager {
         undoStack.push(new Step(row, col, player, currentBoard));
     }
 
-    //Checks if undo is possible
+    // Checks if undo is possible
     public boolean canUndo() {
         return !undoStack.isEmpty();
     }
@@ -69,6 +65,7 @@ public class HistoryManager {
     }
 
     //Undoes the last move
+
     public int[][] undo() {
         if (!canUndo()) {
             return null;
@@ -85,21 +82,22 @@ public class HistoryManager {
         if (!canRedo()) {
             return null;
         }
+
         Step step = redoStack.pop();
         undoStack.push(step);
 
         return step;
-        // Gets current number of recorded steps
+    }
 
-        public int getStepCount() {
-            return undoStack.size();
-        }
+    //Gets current number of recorded steps
 
-        //Clears all history (for new game)
+    public int getStepCount() {
+        return undoStack.size();
+    }
 
-        public void clear() {
-            undoStack.clear();
-            redoStack.clear();
-        }
+    // Clears all history (for new game)
+    public void clear() {
+        undoStack.clear();
+        redoStack.clear();
     }
 }

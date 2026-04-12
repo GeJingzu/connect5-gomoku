@@ -99,4 +99,17 @@ public class HistoryManagerTest {
         // Cannot undo further
         assertNull(history.undo(), "Cannot undo infinitely");
     }
+    @Test
+    @DisplayName("Clear history")
+    public void testClear() {
+        history.recordMove(7, 7, 1, testBoard);
+        history.recordMove(7, 8, 2, testBoard);
+
+        history.clear();
+
+        assertFalse(history.canUndo());
+        assertFalse(history.canRedo());
+        assertEquals(0, history.getStepCount());
+    }
+
 }
