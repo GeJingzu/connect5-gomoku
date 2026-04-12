@@ -111,5 +111,17 @@ public class HistoryManagerTest {
         assertFalse(history.canRedo());
         assertEquals(0, history.getStepCount());
     }
+    @Test
+    @DisplayName("Deep copy - board modifications after recording don't affect history")
+    public void testDeepCopy() {
+        // Record when board[0][0]=0
+        history.recordMove(7, 9, 1, testBoard);
 
+        // Modify current board
+        testBoard[0][0] = 99;
+
+        // Undo restore, should not see 99
+        int[][] restored = history.undo();
+        assertEquals(0, restored[0][0], "Undo should restore original value, unaffected by later modifications");
+    }
 }
