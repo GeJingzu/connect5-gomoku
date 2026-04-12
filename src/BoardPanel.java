@@ -166,6 +166,56 @@ public BoardPanel() {
 
         g.setColor(Color.GREEN);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 13));
+        g.drawString("(MODE)", 516, 16);
+
+        g.setColor(Color.BLUE);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+        g.drawString("END THE GAME", 19, 508);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 9));
+        g.drawString("REPENTANCE(Undo):", 70, 320);
+        g.drawString("ADMIT DEFEAT:", 73, 276);
+        g.setColor(Color.BLUE);
+        g.drawOval(60,295,100,40);
+        g.drawOval(60,252,100,40);
+
+        // Show countdown display frame
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
+        g.setColor(Color.BLACK);
+        g.drawString("WHITE TIME:", 220, 90);
+        g.drawString("BLACK TIME:", 420, 90);
+
+        // Current round instruction
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+        if (canPlay) {
+            int currentTurn = logic.getCurrentTurn();
+            if (currentTurn == 1) {
+                g.setColor(Color.BLACK);
+                g.drawString("▼ Black Turn ▼", 280, 550);
+            } else {
+                g.setColor(Color.GRAY);
+                g.drawString("▼ White Turn ▼", 280, 550);
+            }
+        }
+        // Display time value placeholders (The display "--: --" indicates that the timing function has not been realized yet)
+        g.setFont(new Font("Monospaced", Font.BOLD, 16));
+        g.setColor(Color.GRAY);
+        g.drawString(blackTimeText, 524, 89);
+        g.drawString(whiteTimeText, 322, 89);
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+        System.out.println(mouseX + " " + mouseY);
+
+        //'START THE GAME' button
+        if (e.getX() >= 19 && e.getX() <= 104 && e.getY() >= 111 && e.getY() <= 135) {
+            JOptionPane.showMessageDialog(this, "Then the game starts now!");
+            clearBoard();
+            startNewGame(); // Start the game to play chess
+            return;
+        }
 
     }
     }
