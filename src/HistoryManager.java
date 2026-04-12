@@ -1,6 +1,9 @@
 //History manager for undo/redo functionality
 // Uses two stacks to track game moves
 public class HistoryManager {
+    public double getStepCount() {
+    }
+
     //Represent a single game step/move
     public static class Step{
         public final int row;
