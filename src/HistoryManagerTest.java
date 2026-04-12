@@ -48,4 +48,23 @@ public class HistoryManagerTest {
         assertEquals(1, restored[7][7], "Board should be restored to original state");
         assertEquals(2, restored[7][8], "Board should be restored to original state");
     }
+
+    @Test
+    @DisplayName("Redo after undo")
+    public void testRedo() {
+        // Record and undo
+        history.recordMove(7, 9, 1, testBoard);
+        history.undo();
+
+        // Redo
+        HistoryManager.Step step = history.redo();
+
+        // Verify
+        assertNotNull(step, "Redo should return the step");
+        assertEquals(7, step.row, "Redo position should be correct");
+        assertEquals(9, step.col, "Redo position should be correct");
+        assertEquals(1, step.player, "Redo player should be correct");
+        assertTrue(history.canUndo(), "Should be able to undo after redo");
+        assertFalse(history.canRedo(), "Should not be able to redo after redo");
+    }
 }
