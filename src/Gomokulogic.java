@@ -8,6 +8,7 @@ public class Gomokulogic {
     private int size = 15;
     private int[][] board;
     public int gameMode = 0;// 0: Classic, 1: Merging Mode
+    private int currentTurn = 1; //1.Black 2.White
     //Consteuctor
     public Gomokulogic() {
         board = new int[size][size];
@@ -15,7 +16,12 @@ public class Gomokulogic {
     public int[][] getBoard(){
         return board;
     }
-
+    public int getCurrentTurn(){
+        return currentTurn;
+    }
+    private void switchTurn(){
+        currentTurn = (currentTurn == 1) ? 2:1;
+    }
     public void printBoard() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -33,9 +39,11 @@ public class Gomokulogic {
             // Only place if the spot is empty (0)
             if (board[r][c] == 0) {
                 board[r][c] = color;
+                switchTurn();
                 return true;
             } else if (gameMode == 1 && board[r][c] == color) {
                 board[r][c] = color + 10;
+                switchTurn();
                 System.out.println("Success: Merged.");
                 return true;
             } else {
@@ -149,5 +157,6 @@ public class Gomokulogic {
                 board[i][j] = 0;
             }
         }
+        currentTurn = 1;
     }
 }
