@@ -118,6 +118,21 @@ public BoardPanel() {
                     int x = 170 + c * cellSize;
                     int y = 118 + r * cellSize;
 
+                    //Judge the type of chess pieces
+                    if (piece == 1 || piece == 11) {
+                        //Black chess (including the merged black chess)
+                        g.setColor(Color.BLACK);
+                        g.fillOval(x - 10, y - 10, 20, 20);
+                        g.setColor(Color.BLACK);
+                        g.drawOval(x - 10, y - 10, 20, 20);
+
+                        //If the pieces are merged, draw ★ mark
+                        if (piece == 11) {
+                            g.setColor(Color.RED);
+                            g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+                            g.drawString("★", x - 4, y + 5);
+                        }
+                    }
 
                 }
     }
