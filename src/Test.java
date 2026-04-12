@@ -5,6 +5,8 @@ public class Test {
         testPlacePiece();
         testMergeMode();
         testTurnSwitch();
+        testUndo();
+        testEasyAI();
     }
 
     // Check basic place and bounds
@@ -57,5 +59,24 @@ public class Test {
         System.out.println((game.getCurrentTurn() == 1)); // Expected: true
         game.placePiece(0, 0, 1);
         System.out.println((game.getCurrentTurn() == 2)); // Expected: true
+    }
+    // Check undo functionality
+    public static void testUndo() {
+        Gomokulogic game = new Gomokulogic();
+        System.out.println(!game.undo()); // Expected: true
+        game.placePiece(7, 7, 1);
+        game.undo();
+        System.out.println((game.getPiece(7, 7) == 0)); // Expected: true
+    }
+
+    // Check AI move
+    public static void testEasyAI() {
+        Gomokulogic game = new Gomokulogic();
+        int[] aiMove = game.easyAIMove(2);
+        boolean isValid = (aiMove != null && aiMove.length == 2);
+        System.out.println(isValid); // Expected: true
+        if (isValid) {
+            System.out.println((game.getPiece(aiMove[0], aiMove[1]) == 2)); // Expected: true
+        }
     }
 }
