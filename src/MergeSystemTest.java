@@ -60,4 +60,27 @@ public class MergeSystemTest {
         assertTrue(mergeSystem.canMerge(board, 6, 7, 1),
                 "Vertical 3 can merge");
     }
+    @Test
+    @DisplayName("Diagonal 3 consecutive can merge")
+    public void testDiagonalThreeCanMerge() {
+        board[5][5] = 1;
+        board[6][6] = 1;
+        board[7][7] = 1;
+
+        assertTrue(mergeSystem.canMerge(board, 6, 6, 1),
+                "Diagonal 3 can merge");
+    }
+
+    @Test
+    @DisplayName("4 consecutive can also merge")
+    public void testFourCanMerge() {
+        board[7][5] = 1;
+        board[7][6] = 1;
+        board[7][7] = 1;
+        board[7][8] = 1;
+
+        assertTrue(mergeSystem.canMerge(board, 7, 6, 1),
+                "4 consecutive can merge");
+    }
+
 }
