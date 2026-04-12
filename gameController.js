@@ -4,7 +4,6 @@
 
 const GameState = {
     // Stage 1: Basic structures
-    // 15x15 board: 0 for empty, 1 for Black, 2 for White
     board: Array(15).fill(null).map(() => Array(15).fill(0)),
     currentPlayer: 1,
     gameStatus: 'IDLE',//Status:IDLE,PLAYING,ENDED
