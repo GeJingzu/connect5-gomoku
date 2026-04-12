@@ -84,4 +84,25 @@ public class GameState {
                 Constants.WHITE : Constants.BLACK;
         return true;
     }
+    public boolean redo() {
+        if (!history.canRedo()) return false;
+        HistoryManager.Step step = history.redo();
+        if (step == null) return false;
+
+        board[step.row][step.col] = step.player;
+        switchPlayer();
+        return true;
+    }
+
+    private void switchPlayer() {
+    }
+
+    // Load a puzzle level
+    public void loadEndgame(EndgameLoader.Level level) {
+        reset();
+        for (int i = 0; i < Constants.BOARD_SIZE; i++) {
+            board[i] = level.board[i].clone();
+        }
+        currentPlayer = level.firstPlayer;
+    }
 }
