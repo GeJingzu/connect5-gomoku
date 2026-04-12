@@ -115,5 +115,26 @@ public class MergeSystemTest {
 
     private void assertEquals(int i, int size, String s) {
     }
+    @Test
+    @DisplayName("Merge returns captured piece coordinates")
+    public void testMergeReturnsCapturedPositions() {
+        board[7][6] = 1;
+        board[7][7] = 1;
+        board[7][8] = 1;
+        board[6][7] = 2;
+
+        List<int[]> captured = mergeSystem.executeMerge(board, 7, 7, 1);
+
+        // Verify returned coordinates are correct
+        boolean found = false;
+        for (int[] pos : captured) {
+            if (pos[0] == 6 && pos[1] == 7) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue("Should return correct coordinates of captured piece", found);
+    }
+
 
 }
