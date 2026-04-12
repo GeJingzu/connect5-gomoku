@@ -22,6 +22,20 @@ public class BoardPanel extends JPanel implements MouseListener {
     private int startX = 130;
     private int startY = 100;
 
+public BoardPanel() {
+    setBackground(Color.WHITE);
+    this.addMouseListener(this);
+    logic = new Gomokulogic(); // Initialize game logic.
+}
+
+//Start a new game (without timer)
+    private void startNewGame(){
+        logic.reset(); //Reset game logic
+        blackTimeText = "--:--";
+        whiteTimeText = "--:--";
+        canPlay = true;
+        repaint();
 
 
+    }
 }
