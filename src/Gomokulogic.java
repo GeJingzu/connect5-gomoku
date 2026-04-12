@@ -141,7 +141,7 @@ public class Gomokulogic {
             r = rand.nextInt(15);
             c = rand.nextInt(15);
             if (board[r][c] == 0) {
-                placePiece(r, c, aiColor);  // 添加这一行：AI直接落子
+                placePiece(r, c, aiColor);
                 return new int[]{r, c};
             }
         }
