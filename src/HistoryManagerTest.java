@@ -67,4 +67,36 @@ public class HistoryManagerTest {
         assertTrue(history.canUndo(), "Should be able to undo after redo");
         assertFalse(history.canRedo(), "Should not be able to redo after redo");
     }
+    @Test
+    @DisplayName("New move clears redo stack")
+    public void testNewMoveClearsRedo() {
+        // First move -> undo -> new move (should clear redo stack)
+        history.recordMove(7, 9, 1, testBoard);
+        history.undo();
+
+        // Modify board
+        testBoard[8][8] = 1;
+        history.recordMove(8, 8, 1, testBoard);
+
+        // Redo stack should be cleared
+        assertFalse(history.canRedo(), "Should not be able to redo old steps after new move");
+    }
+
+    @Test
+    @DisplayName("Undo multiple steps sequentially")
+    public void testMultipleUndos() {
+        // Record 3 steps
+        for (int i = 0; i < 3; i++) {
+            history.recordMove(7, 7+i, (i % 2 == 0) ? 1 : 2, testBoard);
+        }
+        assertEquals(3, history.getStepCount());
+
+        // Undo 3 times sequentially
+        assertTrue(history.undo() != null);
+        assertTrue(history.undo() != null);
+        assertTrue(history.undo() != null);
+
+        // Cannot undo further
+        assertNull(history.undo(), "Cannot undo infinitely");
+    }
 }
