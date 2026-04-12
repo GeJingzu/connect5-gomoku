@@ -1,3 +1,5 @@
+//Main game controller
+//Connects board,history,and merge system
 public class GameState {
     private int[][] board;
     private int currentPlayer;
@@ -13,6 +15,7 @@ public class GameState {
         reset();
     }
 
+    //Start fresh game
     public void reset() {
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
             for (int j = 0; j < Constants.BOARD_SIZE; j++) {
@@ -25,6 +28,7 @@ public class GameState {
         history.clear();
     }
 
+    //Place a piece normally
     public boolean placePiece(int row, int col) {
         if (gameOver || !isValid(row, col)) return false;
 
@@ -49,6 +53,7 @@ public class GameState {
         return false;
     }
 
+    //Try to merge at position
     public boolean tryMerge(int row, int col) {
         if (gameOver || board[row][col] != currentPlayer) return false;
         if (!mergeSystem.canMerge(board, row, col, currentPlayer)) return false;
@@ -63,6 +68,20 @@ public class GameState {
             currentPlayer = (currentPlayer == Constants.BLACK) ?
                     Constants.WHITE : Constants.BLACK;
         }
+        return true;
+    }
+    public boolean undo() {
+        if (!history.canUndo()) return false;
+        int[][] prev = history.undo();
+        if (prev == null) return false;
+
+        for (int i = 0; i < Constants.BOARD_SIZE; i++) {
+            board[i] = prev[i].clone();
+        }
+        gameOver = false;
+        winner = Constants.EMPTY;
+        currentPlayer = (currentPlayer == Constants.BLACK) ?
+                Constants.WHITE : Constants.BLACK;
         return true;
     }
 }
