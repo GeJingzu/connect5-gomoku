@@ -98,5 +98,27 @@ public BoardPanel() {
             g.drawLine(x, 118, x, 498);
         }
 
+        //Draw star position
+        int[] starPoints = {3,7,11};
+
+        for (int r : starPoints) {
+            for (int c : starPoints) {
+                int x = 170 + c * cellSize;
+                int y = 118 + r * cellSize;
+                g.fillOval(x - 2, y - 2, 4, 4);
+            }
+        }
+
+        //Draw pieces using logic.getBoard()
+        int[][] board = logic.getBoard();
+        for (int r = 0; r < SIZE; r++){
+            for (int c = 0; c < SIZE; c++) {
+                int piece = board[r][c];
+                if (piece != 0) {
+                    int x = 170 + c * cellSize;
+                    int y = 118 + r * cellSize;
+
+
+                }
     }
     }
