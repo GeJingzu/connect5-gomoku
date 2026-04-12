@@ -1,9 +1,10 @@
 public class Test {
     public static void main(String[] args) {
         System.out.println("Test");
-
+        testWinLogic();
         testPlacePiece();
-        // We will add more tests here later
+        testMergeMode();
+        testTurnSwitch();
     }
 
     // Check basic place and bounds
@@ -49,5 +50,12 @@ public class Test {
 
         int val = game.getPiece(5, 5);
         System.out.println((val == 12)); // Expected: true
+    }
+    // Check turn switching
+    public static void testTurnSwitch() {
+        Gomokulogic game = new Gomokulogic();
+        System.out.println((game.getCurrentTurn() == 1)); // Expected: true
+        game.placePiece(0, 0, 1);
+        System.out.println((game.getCurrentTurn() == 2)); // Expected: true
     }
 }
