@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
 import java.io.File;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EndgameLoaderTest {
 
@@ -45,5 +45,21 @@ public class EndgameLoaderTest {
         assertEquals(Constants.BLACK, level.firstPlayer);
         assertEquals(1, level.targetMoves);
         assertEquals(15, level.board.length);
+    }
+    @Test
+    @DisplayName("Load non-existent returns null")
+    public void testLoadNonExistent() {
+        assertNull(loader.loadLevel("none.txt"));
+    }
+
+    @Test
+    @DisplayName("List levels")
+    public void testListLevels() {
+        loader.createSampleLevel();
+
+        List<String> levels = loader.listLevels();
+
+        assertEquals(1, levels.size());
+        assertTrue(levels.contains("level1.txt"));
     }
 }
