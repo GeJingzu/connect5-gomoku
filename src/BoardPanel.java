@@ -36,6 +36,20 @@ public BoardPanel() {
         canPlay = true;
         repaint();
 
+    }
 
+    //Clear the chessboard and refresh the interface
+    public void clearBoard(){
+        logic.reset(); //Use logic's reset method;
+        repaint();
+    }
+
+    private void checkWinOrDraw(int row, int col, int color){
+    if (logic.checkWin(row, col, color)){
+        canPlay = false;
+        String winner = (color == 1) ? "Black" : "White";
+        int result = JOptionPane.showConfirmDialog(this,winner + "side wins!\nStart over?","Game Over",JOptionPane.YES_NO_OPTION);
+
+    }
     }
 }
