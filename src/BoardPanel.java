@@ -216,6 +216,67 @@ public BoardPanel() {
             startNewGame(); // Start the game to play chess
             return;
         }
+        //'REPENTANCE' button
+        if (e.getX() >= 63 && e.getX() <= 154 && e.getY() >= 298 && e.getY() <= 324) {
+            if (!canPlay) return;
+            logic.undo(); // Call repentance algorithm
+            repaint();
+            return;
+        }
+
+        //'HELP' button
+        if (e.getX() >= 140 && e.getX() <= 180 && e.getY() >= 35 && e.getY() <= 61) {
+            JOptionPane.showMessageDialog(this, "=== Five Chess Game Help ===\n\n" +
+                    "【Game Rules】\n" +
+                    "• You need connect 5 pieces in a line, can be horizontal, vertical or diagonal, then you win\n" +
+                    "• Black chess always go first\n" +
+                    "• Every player has 5 minutes time, don't be too slow\n\n" +
+                    "【Button Functions】\n" +
+                    "• START - Begin a new game, let's play\n" +
+                    "• RESTART - Clear all chess and start again\n" +
+                    "• REPENTANCE - Take back your last step (now we have this function in Milestone 2)\n" +
+                    "• ADMIT DEFEAT - If you feel cannot win, you can admit lose\n" +
+                    "• END THE GAME - Close the game, goodbye\n\n" +
+                    "【Countdown】\n" +
+                    "• If your time finish, you will lose automatically\n" +
+                    "• Timer will change to another player by itself when turn changed\n\n" +
+                    "【Milestone 2 Updates】\n" +
+                    "• Undo function is ready to use now!\n" +
+                    "• Countdown timer is working good\n" +
+                    "• Game look more beautiful than before");
+            return;
+        }
+
+        //"AI MODE" BUTTON
+        if (e.getX() >= 206 && e.getX() <= 285 && e.getY() >= 36 && e.getY() <= 60) {
+            //Check whether the game is in progress
+            if (!canPlay) {
+                JOptionPane.showMessageDialog(this, "Please start the game first!");
+                return;
+            }
+
+            // Get the current turn (the chess pieces that AI should play in the current turn)
+            int aiColor = logic.getCurrentTurn();
+
+            int[] aiMove = logic.easyAIMove();
+
+            if (aiMove != null) {
+                int row = aiMove[0];
+                int col = aiMove[1];
+                logic.placePiece(row, col, aiColor);
+                repaint();
+                checkWinOrDraw(row, col, aiColor);
+            }
+            return;
+        }
+
+        //"CLASSIC MODE" BUTTON
+        if (e.getX() >= 466 && e.getX() <= 531 && e.getY() >= 24 && e.getY() <= 50) {
+            logic.gameMode = 0;
+            JOptionPane.showMessageDialog(this, "Switched to CLASSIC MODE");
+            repaint();
+            return;
+        }
 
     }
     }
