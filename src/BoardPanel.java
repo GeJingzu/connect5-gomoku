@@ -65,5 +65,38 @@ public BoardPanel() {
         }
     }
     }
+    /**
+     * Draw chessboard buttons, text, chessboard structure.
+     */
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g); //Background security refresh
+        g.setColor(Color.BLACK);
 
-}
+        //Draw a rectangular box
+        g.drawRect(170, 118, 380, 380); //Make a rectangle
+        g.drawRect(19, 36, 100, 26); //Make a rectangle
+        g.drawRect(140, 36, 40, 26); //Make a rectangle
+        g.drawRect(217, 70, 200, 28); //Make a rectangle
+        g.drawRect(418, 70, 200, 28); //Make a rectangle
+        g.drawRect(19, 110, 85, 26); //Make a rectangle
+        g.drawRect(15, 487, 95, 26); //Make a rectangle
+        g.drawRect(18, 185, 120, 26); //Make a rectangle
+        g.drawRect(206, 36, 80, 26); //Make a rectangle
+        g.drawRect(455, 4, 163, 64); //Make a rectangle
+        g.drawRect(466, 23, 65, 28); //Make a rectangle
+        g.drawRect(547, 23, 65, 28); //Make a rectangle
+
+        //Draw a checkerboard grid
+        int cellSize = 380 / (SIZE-1);
+        for (int i = 0; i <SIZE; i++){
+            int y = 118 + i * cellSize;
+            g.drawLine(170, y, 550, y);
+        }
+        for (int i = 0; i < SIZE; i++) {
+            int x = 170 + i * cellSize;
+            g.drawLine(x, 118, x, 498);
+        }
+
+    }
+    }
