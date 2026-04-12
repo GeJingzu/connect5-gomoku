@@ -160,8 +160,26 @@ public class Gomokulogic {
             for (int j = 0; j < 15; j++) {
                 if (board[i][j] == 0) {
                     return false;
-
-
-
-
                 }
+            }
+        }
+        return true;
+    }
+
+
+    public void reset() {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                board[i][j] = 0;
+            }
+        }
+        currentTurn = 1;
+        moveHistory.clear();
+    }
+}
+
+
+
+
+
+
