@@ -1,7 +1,7 @@
 /**
  * NAME:Yunlong Wang
  */
-
+//ok
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
