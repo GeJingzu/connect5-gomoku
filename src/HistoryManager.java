@@ -31,17 +31,27 @@ public class HistoryManager {
             }
         }
     }
-    /** Stack for undo operations (stores completed moves) */
+    //Stack for undo operations (stores completed moves)
     private Stack<Step> undoStack;
 
-    /** Stack for redo operations (stores undone moves) */
+    //Stack for redo operations (stores undone moves)
     private Stack<Step> redoStack;
 
-    /**
-     * Creates a new history manager
-     */
+    //Creates a new history manager
     public HistoryManager() {
         undoStack = new Stack<>();
         redoStack = new Stack<>();
+    }
+    //Records a new move
+     //Clears redo stack when new move is made
+     //@param row Row of move
+     //@param col Column of move
+     //@param player Player making move
+     //@param currentBoard Board state before move
+    public void recordMove(int row, int col, int player, int[][] currentBoard) {
+        // New move clears redo history
+        redoStack.clear();
+        // Save current state before the move
+        undoStack.push(new Step(row, col, player, currentBoard));
     }
 }
