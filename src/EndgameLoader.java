@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 //Endgame level loader
@@ -46,6 +48,33 @@ public class EndgameLoader {
 
         } catch (IOException e) {
             return null;
+        }
+    }
+    public List<String> listLevels() {
+        List<String> files = new ArrayList<>();
+        File dir = new File(dataPath);
+        File[] list = dir.listFiles((d, name) -> name.endsWith(".txt"));
+        if (list != null) {
+            for (File f : list) files.add(f.getName());
+        }
+        return files;
+    }
+
+    public void createSampleLevel() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("One Move Kill\nBLACK\n1\n");
+
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                sb.append((i == 7 && j >= 5 && j <= 8) ? "1 " : "0 ");
+            }
+            sb.append("\n");
+        }
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(dataPath + "level1.txt"))) {
+            pw.print(sb.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
