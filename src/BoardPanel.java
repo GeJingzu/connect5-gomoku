@@ -371,7 +371,32 @@ public BoardPanel() {
                 }
                 return;
             }
-
+            // Check draw
+            if (logic.isFull()) {
+                canPlay = false;
+                int result = JOptionPane.showConfirmDialog(this,
+                        "Draw! Board is full.\nStart over?",
+                        "Game Over",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    clearBoard();
+                    startNewGame();
+                }
+            }
         }
     }
-    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
+
+}
+
+
+
+
