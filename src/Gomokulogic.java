@@ -7,12 +7,13 @@ public class Gomokulogic {
     //Define the size of the chessboard
     private int size = 15;
     private int[][] board;
-
     public int gameMode = 0;// 0: Classic, 1: Merging Mode
-
     //Consteuctor
     public Gomokulogic() {
         board = new int[size][size];
+    }
+    public int[][] getBoard(){
+        return board;
     }
 
     public void printBoard() {
@@ -59,7 +60,7 @@ public class Gomokulogic {
         //Horizontal
         count = 1;
         for (int i = c + 1; i < 15; i++) {
-            if (isPlayer(board[r][i], color) count++;
+            if (isPlayer(board[r][i], color)) count++;
             else break;
         }
         for (int i = c - 1; i >= 0; i--) {
@@ -86,7 +87,7 @@ public class Gomokulogic {
             else break;
         }
         for (int i = 1; r - i >= 0 && c - i >= 0; i--) {
-            if (isPlayer(board[r - i][c - i], color))  count++;
+            if (isPlayer(board[r - i][c - i], color)) count++;
             else break;
         }
         if (count >= 5) return true;
@@ -109,6 +110,7 @@ public class Gomokulogic {
     public int[] easyAIMove(int aiColor) {
         Random rand = new Random();
         int r, c;
+        if (isFull())return null;
         while (true) {
             r = rand.nextInt(15);
             c = rand.nextInt(15);
