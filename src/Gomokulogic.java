@@ -133,14 +133,15 @@ public class Gomokulogic {
     }
 
     // Easy AI: find a random empty spot to move
-    public int[] easyAIMove() {
+    public int[] easyAIMove(int aiColor) {
         Random rand = new Random();
         int r, c;
-        if (isFull()) return null; // If the chessboard is full, you won't find it
+        if (isFull()) return null;
         while (true) {
             r = rand.nextInt(15);
             c = rand.nextInt(15);
             if (board[r][c] == 0) {
+                placePiece(r, c, aiColor);  // 添加这一行：AI直接落子
                 return new int[]{r, c};
             }
         }

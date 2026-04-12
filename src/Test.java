@@ -2,10 +2,6 @@
  * NAME:Yunlong Wang
  */
 
-/**
- * NAME:Yunlong Wang
- */
-
 import javax.swing.*;
 import java.util.Objects;
 
