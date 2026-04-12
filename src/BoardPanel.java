@@ -133,7 +133,40 @@ public BoardPanel() {
                             g.drawString("★", x - 4, y + 5);
                         }
                     }
+                    else if (piece == 2 || piece == 12) {
+                        //White (including the merged white)
+                        g.setColor(Color.WHITE);
+                        g.fillOval(x - 10, y - 10, 20, 20);
+                        g.setColor(Color.BLACK);
+                        g.drawOval(x - 10, y - 10, 20, 20);
 
+                        //If the pieces are merged, draw ★ mark
+                        if (piece == 12) {
+                            g.setColor(Color.RED);
+                            g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+                            g.drawString("★", x - 4, y + 5);
+                        }
+                    }
                 }
+            }
+        }
+        //Draw title and time bar labels
+        g.setColor(Color.RED);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+        g.drawString("Five chess game", 20, 55);
+        g.drawString("Help", 145, 55);
+        g.drawString("AI MODE",220,55);
+        g.drawString("START", 42, 130);
+        g.drawString("RESTART THE GAME", 20, 205);
+
+        g.setColor(Color.RED);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 9));
+        g.drawString("CLASSIC MODE", 465, 40);
+        g.drawString("MERGE", 562, 40);
+
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 13));
+
+    }
     }
     }
