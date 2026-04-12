@@ -2,6 +2,7 @@
 
 import javax.swing.*;
 import java.util.Random;
+import java.util.Stack;
 
 public class Gomokulogic {
     //Define the size of the chessboard
@@ -9,6 +10,7 @@ public class Gomokulogic {
     private int[][] board;
     public int gameMode = 0;// 0: Classic, 1: Merging Mode
     private int currentTurn = 1; //1.Black 2.White
+    private Stack<int[]> moveHistory;
     //Consteuctor
     public Gomokulogic() {
         board = new int[size][size];
@@ -39,10 +41,12 @@ public class Gomokulogic {
             // Only place if the spot is empty (0)
             if (board[r][c] == 0) {
                 board[r][c] = color;
+                moveHistory.push(new int[]{r,c,color,0});
                 switchTurn();
                 return true;
             } else if (gameMode == 1 && board[r][c] == color) {
                 board[r][c] = color + 10;
+                moveHistory.push(new int[]{r,c,color,1});
                 switchTurn();
                 System.out.println("Success: Merged.");
                 return true;
@@ -54,6 +58,23 @@ public class Gomokulogic {
         }
 
         return false; // Failed to place
+    }
+    public boolean undo() {
+        if (moveHistory.isEmpty()) {
+            return false; // 无棋可悔
+        }
+        int[] lastMove = moveHistory.pop();
+        int r = lastMove[0];
+        int c = lastMove[1];
+        int type = lastMove[3];
+
+        if (type == 0) {
+            board[r][c] = 0; // 撤销普通落子
+        } else if (type == 1) {
+            board[r][c] -= 10; // 撤销融合落子
+        }
+        switchTurn(); // 撤销回合
+        return true;
     }
 
     private boolean isPlayer(int val, int color) {
@@ -124,7 +145,7 @@ public class Gomokulogic {
             c = rand.nextInt(15);
 
             if (board[r][c] == 0) {
-                board[r][c] = aiColor;
+                placePiece(r,c,aiColor);
                 return new int[]{r, c};
             }
         }
@@ -158,5 +179,6 @@ public class Gomokulogic {
             }
         }
         currentTurn = 1;
+        moveHistory.clear();
     }
 }
