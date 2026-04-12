@@ -1,7 +1,12 @@
+import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 
 import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class EndgameLoaderTest {
 
@@ -27,5 +32,18 @@ public class EndgameLoaderTest {
             }
             dir.delete();
         }
+    }
+    @Test
+    @DisplayName("Create and load sample level")
+    public void testCreateAndLoad() {
+        loader.createSampleLevel();
+
+        EndgameLoader.Level level = loader.loadLevel("level1.txt");
+
+        assertNotNull(level);
+        assertEquals("One Move Kill", level.name);
+        assertEquals(Constants.BLACK, level.firstPlayer);
+        assertEquals(1, level.targetMoves);
+        assertEquals(15, level.board.length);
     }
 }
