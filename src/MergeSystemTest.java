@@ -2,6 +2,8 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class MergeSystemTest {
@@ -81,6 +83,37 @@ public class MergeSystemTest {
 
         assertTrue(mergeSystem.canMerge(board, 7, 6, 1),
                 "4 consecutive can merge");
+    }
+    @Test
+    @DisplayName("Execute merge captures surrounding enemy pieces")
+    public void testExecuteMergeCaptures() {
+        // Black 3 consecutive
+        board[7][5] = 1;
+        board[7][6] = 1;
+        board[7][7] = 1;
+
+        // Place white pieces within MERGE_RANGE=1
+        board[6][6] = 2;  // Above
+        board[8][6] = 2;  // Below
+        board[6][7] = 2;  // Upper right
+        board[8][8] = 2;  // Outside range, should not be captured
+
+        // Execute merge
+        List<int[]> captured = mergeSystem.executeMerge(board, 7, 6, 1);
+
+        // Verify 3 pieces captured
+        assertEquals(3, captured.size(), "Should capture 3 white pieces");
+
+        // Verify captured positions become black
+        assertEquals(1, board[6][6], "Captured position should become black");
+        assertEquals(1, board[8][6], "Captured position should become black");
+        assertEquals(1, board[6][7], "Captured position should become black");
+
+        // Verify outside range remains unchanged
+        assertEquals(2, board[8][8], "Outside range should remain white");
+    }
+
+    private void assertEquals(int i, int size, String s) {
     }
 
 }
