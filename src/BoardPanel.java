@@ -19,5 +19,9 @@ public class BoardPanel extends JPanel implements MouseListener {
     private String blackTimeText = "--:--";
     private String whiteTimeText = "--:--";
 
+    private int startX = 130;
+    private int startY = 100;
+
+
 
 }
