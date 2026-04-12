@@ -48,4 +48,21 @@ public class GameState {
     private boolean isValid(int row, int col) {
         return false;
     }
+
+    public boolean tryMerge(int row, int col) {
+        if (gameOver || board[row][col] != currentPlayer) return false;
+        if (!mergeSystem.canMerge(board, row, col, currentPlayer)) return false;
+
+        history.recordMove(row, col, currentPlayer, board);
+        mergeSystem.executeMerge(board, row, col, currentPlayer);
+
+        if (checkWin(row, col)) {
+            gameOver = true;
+            winner = currentPlayer;
+        } else {
+            currentPlayer = (currentPlayer == Constants.BLACK) ?
+                    Constants.WHITE : Constants.BLACK;
+        }
+        return true;
+    }
 }
