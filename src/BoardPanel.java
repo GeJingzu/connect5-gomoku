@@ -277,7 +277,101 @@ public BoardPanel() {
             repaint();
             return;
         }
+        //"MERGE" BUTTON
+        if (e.getX() >= 547 && e.getX() <= 611 && e.getY() >= 23 && e.getY() <= 49) {
+            logic.gameMode = 1;
+            JOptionPane.showMessageDialog(this, "Switched to MERGE MODE\nYou can now merge pieces of same color!");
+            repaint();
+            return;
+        }
 
-    }
+        //'END THE GAME'BUTTON
+        if (e.getX() >= 15 && e.getX() <= 101 && e.getY() >= 488 && e.getY() <= 512) {
+            JOptionPane.showMessageDialog(this, "Goodbye~");
+            System.exit(0);
+            return;
+        }
+
+        //'RESTART THE GAME' button
+        if (e.getX() >= 16 && e.getX() <= 139 && e.getY() >= 184 && e.getY() <= 209) {
+            JOptionPane.showMessageDialog(this, "Then the chessboard will be cleared");
+            clearBoard();
+            startNewGame(); // Start the game to play chess
+            return;
+        }
+
+        //'ADMIT DEFEAT' button
+        if (e.getX() >= 60 && e.getX() <= 155 && e.getY() >= 258 && e.getY() <= 287) {
+            int result2 = JOptionPane.showConfirmDialog(this, "Are you sure you want to admit defeat?");
+            System.out.println("result2=" + result2);
+            if (result2 == 0) {
+                JOptionPane.showMessageDialog(this, "Okay, so the game is banned");
+                clearBoard();
+                canPlay = false;
+            } else if (result2 == 1) {
+                JOptionPane.showMessageDialog(this, "I see, so keep playing.");
+                canPlay = true;
+            } else {
+                JOptionPane.showMessageDialog(this, "I see, so keep playing.");
+            }
+            return;
+        }
+        // Check if click is on the chessboard
+        if (mouseX < 170 || mouseX > 550 || mouseY < 118 || mouseY > 498) {
+            System.out.println("Click outside the chessboard, invalid");
+            return;
+        }
+
+        if (!canPlay) {
+            System.out.println("The game has not started or has ended. You can't drop pieces!");
+            JOptionPane.showMessageDialog(this, "The game has not started or has ended!");
+            return;
+        }
+
+        int col = Math.round((mouseX - 170) / (float) cellSize);
+        int row = Math.round((mouseY - 118) / (float) cellSize);
+
+        // Boundary check
+        if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
+            return;
+        }
+
+        int currentColor = logic.getCurrentTurn();
+        int existingPiece = logic.getPiece(row, col);
+
+        //Check whether it can be dropped
+        boolean canPlace = false;
+
+        if (existingPiece == 0) {
+            //Empty seat, you can go down
+            canPlace = true;
+        } else if (logic.gameMode == 1 && existingPiece == currentColor) {
+            //Merge mode: you can merge on your own chess pieces
+            canPlace = true;
+        } else {
+            //Other conditions: not applicable
+            JOptionPane.showMessageDialog(this, "Cannot place here!");
+            return;
+        }
+
+        if (canPlace && logic.placePiece(row, col, currentColor)) {
+            repaint();
+
+            // Check win
+            if (logic.checkWin(row, col, currentColor)) {
+                canPlay = false;
+                String winner = (currentColor == 1) ? "Black" : "White";
+                int result = JOptionPane.showConfirmDialog(this,
+                        winner + " side wins!\nStart over?",
+                        "Game Over",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    clearBoard();
+                    startNewGame();
+                }
+                return;
+            }
+
+        }
     }
     }
