@@ -86,5 +86,17 @@ public class HistoryManager {
         undoStack.push(step);
 
         return step;
+        // Gets current number of recorded steps
+
+        public int getStepCount() {
+            return undoStack.size();
+        }
+
+        //Clears all history (for new game)
+
+        public void clear() {
+            undoStack.clear();
+            redoStack.clear();
+        }
     }
 }
