@@ -54,4 +54,37 @@ public class HistoryManager {
         // Save current state before the move
         undoStack.push(new Step(row, col, player, currentBoard));
     }
+
+    //Checks if undo is possible
+    public boolean canUndo() {
+        return !undoStack.isEmpty();
+    }
+
+    // Checks if redo is possible
+    public boolean canRedo() {
+        return !redoStack.isEmpty();
+    }
+
+    //Undoes the last move
+    public int[][] undo() {
+        if (!canUndo()) {
+            return null;
+        }
+
+        Step step = undoStack.pop();
+        redoStack.push(step);
+
+        return step.boardBefore;
+    }
+
+    //Redoes a previously undone move
+    public Step redo() {
+        if (!canRedo()) {
+            return null;
+        }
+        Step step = redoStack.pop();
+        undoStack.push(step);
+
+        return step;
+    }
 }
