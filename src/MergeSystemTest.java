@@ -6,12 +6,11 @@ import static org.junit.Assert.*;
 
 public class MergeSystemTest {
 
-    private MergeSystem mergeSystem;
+    private MergeSystem mergeSystem = new MergeSystem();
     private int[][] board;
 
     @BeforeEach
     void setUp() {
-        mergeSystem = new MergeSystem();
         board = new int[15][15];
     }
 
@@ -37,5 +36,28 @@ public class MergeSystemTest {
         board[7][7] = 1;
         assertFalse(mergeSystem.canMerge(board, 7, 7, 1),
                 "2 consecutive pieces should not be able to merge");
+    }
+    @Test
+    @DisplayName("Horizontal 3 consecutive can merge")
+    public void testHorizontalThreeCanMerge() {
+        board[7][5] = 1;
+        board[7][6] = 1;
+        board[7][7] = 1;
+
+        assertTrue(mergeSystem.canMerge(board, 7, 6, 1),
+                "Middle of horizontal 3 can merge");
+        assertTrue(mergeSystem.canMerge(board, 7, 7, 1),
+                "Edge of horizontal 3 can also merge");
+    }
+
+    @Test
+    @DisplayName("Vertical 3 consecutive can merge")
+    public void testVerticalThreeCanMerge() {
+        board[5][7] = 1;
+        board[6][7] = 1;
+        board[7][7] = 1;
+
+        assertTrue(mergeSystem.canMerge(board, 6, 7, 1),
+                "Vertical 3 can merge");
     }
 }
