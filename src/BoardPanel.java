@@ -31,8 +31,7 @@ class BoardPanel extends JPanel implements MouseListener {
     //Start a new game (without timer)
     private void startNewGame() {
         logic.reset(); // Reset game logic
-        blackTimeText = "--:--";
-        whiteTimeText = "--:--";
+        gameState.gameMode = 0;
         canPlay = true;
         repaint();
     }
@@ -113,42 +112,24 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         // Draw pieces using logic.getBoard()
-        int[][] board = logic.getBoard();
+        int[][] board = gameState.getBoard();
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 int piece = board[r][c];
-                if (piece != 0) {
+                if (piece != Constants.EMPTY) {
                     int x = 170 + c * cellSize;
                     int y = 118 + r * cellSize;
 
-                    //Judge the type of chess pieces
-                    if (piece == 1 || piece == 11) {
-                        //Black chess (including the merged black chess)
+                    if (piece == Constants.BLACK) {
                         g.setColor(Color.BLACK);
                         g.fillOval(x - 10, y - 10, 20, 20);
                         g.setColor(Color.BLACK);
                         g.drawOval(x - 10, y - 10, 20, 20);
-
-                        //If the pieces are merged, draw ★ mark
-                        if (piece == 11) {
-                            g.setColor(Color.RED);
-                            g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
-                            g.drawString("★", x - 4, y + 5);
-                        }
-                    }
-                    else if (piece == 2 || piece == 12) {
-                        //White (including the merged white)
+                    } else if (piece == Constants.WHITE) {
                         g.setColor(Color.WHITE);
                         g.fillOval(x - 10, y - 10, 20, 20);
                         g.setColor(Color.BLACK);
                         g.drawOval(x - 10, y - 10, 20, 20);
-
-                        //If the pieces are merged, draw ★ mark
-                        if (piece == 12) {
-                            g.setColor(Color.RED);
-                            g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
-                            g.drawString("★", x - 4, y + 5);
-                        }
                     }
                 }
             }
@@ -183,17 +164,11 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawOval(60,295,100,40);
         g.drawOval(60,252,100,40);
 
-        // Show countdown display frame
-        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
-        g.setColor(Color.BLACK);
-        g.drawString("WHITE TIME:", 220, 90);
-        g.drawString("BLACK TIME:", 420, 90);
-
         // Current round instruction
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
-        if (canPlay) {
-            int currentTurn = logic.getCurrentTurn();
-            if (currentTurn == 1) {
+        if (canPlay && !gameState.isGameOver()) {
+            int currentTurn = gameState.getCurrentPlayer();
+            if (currentTurn == Constants.BLACK) {
                 g.setColor(Color.BLACK);
                 g.drawString("▼ Black Turn ▼", 280, 550);
             } else {
@@ -201,12 +176,6 @@ class BoardPanel extends JPanel implements MouseListener {
                 g.drawString("▼ White Turn ▼", 280, 550);
             }
         }
-
-        // Display time value placeholders (The display "--: --" indicates that the timing function has not been realized yet)
-        g.setFont(new Font("Monospaced", Font.BOLD, 16));
-        g.setColor(Color.GRAY);
-        g.drawString(blackTimeText, 524, 89);
-        g.drawString(whiteTimeText, 322, 89);
     }
 
     @Override
@@ -226,8 +195,11 @@ class BoardPanel extends JPanel implements MouseListener {
         //'REPENTANCE' button
         if (e.getX() >= 63 && e.getX() <= 154 && e.getY() >= 298 && e.getY() <= 324) {
             if (!canPlay) return;
-            logic.undo(); // Call repentance algorithm
-            repaint();
+            if (gameState.undo()) {
+                repaint();
+            } else {
+                JOptionPane.showMessageDialog(this, "No more steps to undo!");
+            }
             return;
         }
 
@@ -256,27 +228,32 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"AI MODE" BUTTON
         if (e.getX() >= 206 && e.getX() <= 285 && e.getY() >= 36 && e.getY() <= 60) {
-            //Check whether the game is in progress
-            if (!canPlay) {
+            if (!canPlay || gameState.isGameOver()) {
                 JOptionPane.showMessageDialog(this, "Please start the game first!");
                 return;
             }
-
-            // Get the current turn (the chess pieces that AI should play in the current turn)
-            int aiColor = logic.getCurrentTurn();
-
-            int[] aiMove = logic.easyAIMove(aiColor);
-
+            int aiColor = gameState.getCurrentPlayer();
+            int[] aiMove = gameState.easyAIMove(aiColor);
             if (aiMove != null) {
                 repaint();
-                checkWinOrDraw(aiMove[0], aiMove[1], aiColor);
+                if (gameState.isGameOver()) {
+                    int winner = gameState.getWinner();
+                    String winnerName = (winner == Constants.BLACK) ? "Black" : "White";
+                    int result = JOptionPane.showConfirmDialog(this,
+                            winnerName + " side wins!\nStart over?",
+                            "Game Over", JOptionPane.YES_NO_OPTION);
+                    if (result == JOptionPane.YES_OPTION) {
+                        clearBoard();
+                        startNewGame();
+                    }
+                }
             }
             return;
         }
 
         //"CLASSIC MODE" BUTTON
         if (e.getX() >= 466 && e.getX() <= 531 && e.getY() >= 24 && e.getY() <= 50) {
-            logic.gameMode = 0;
+            gameState.gameMode = 0;
             JOptionPane.showMessageDialog(this, "Switched to CLASSIC MODE");
             repaint();
             return;
@@ -284,15 +261,15 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"MERGE" BUTTON
         if (e.getX() >= 547 && e.getX() <= 611 && e.getY() >= 23 && e.getY() <= 49) {
-            logic.gameMode = 1;
-            JOptionPane.showMessageDialog(this, "Switched to MERGE MODE\nYou can now merge pieces of same color!");
+            gameState.gameMode = 1;
+            JOptionPane.showMessageDialog(this, "Switched to MERGE MODE");
             repaint();
             return;
         }
 
         //'END THE GAME'BUTTON
         if (e.getX() >= 15 && e.getX() <= 101 && e.getY() >= 488 && e.getY() <= 512) {
-            JOptionPane.showMessageDialog(this, "Goodbye~");
+            JOptionPane.showMessageDialog(this, "We need say goodbye.");
             System.exit(0);
             return;
         }
