@@ -17,7 +17,7 @@ class BoardPanel extends JPanel implements MouseListener {
     private int cellSize = 380/(SIZE-1); //Size of each grid.
     private boolean canPlay = false;
 
-    // Timer display placeholders
+    // Implementation of countdown function
     private String blackTimeText = "--:--";
     private String whiteTimeText = "--:--";
 
