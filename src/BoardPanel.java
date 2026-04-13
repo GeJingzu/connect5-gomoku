@@ -32,6 +32,10 @@ class BoardPanel extends JPanel implements MouseListener {
         setBackground(Color.WHITE);
         this.addMouseListener(this);
         logic = new Gomokulogic(); // Initialize game logic.
+        ai = new SimpleAI(logic);
+        gameState = new GameState();
+        history = new HistoryManager(logic);
+        mergeSystem = new MergeSystem(logic);
     }
 
     //Start a new game (without timer)
