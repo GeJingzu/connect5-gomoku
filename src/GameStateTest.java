@@ -58,4 +58,30 @@ public class GameStateTest {
         assertTrue(game.redo());
         assertEquals(Constants.BLACK, game.getBoard()[7][7]);
     }
+    @Test
+    @DisplayName("Five in a row wins")
+    public void testWin() {
+        game.placePiece(7, 5); game.placePiece(0, 0);
+        game.placePiece(7, 6); game.placePiece(0, 1);
+        game.placePiece(7, 7); game.placePiece(0, 2);
+        game.placePiece(7, 8); game.placePiece(0, 3);
+        game.placePiece(7, 9);
+
+        assertTrue(game.isGameOver());
+        assertEquals(Constants.BLACK, game.getWinner());
+    }
+
+    @Test
+    @DisplayName("Merge captures enemies")
+    public void testMerge() {
+        game.placePiece(7, 6);
+        game.placePiece(6, 7);
+        game.placePiece(7, 7);
+        game.placePiece(8, 7);
+        game.placePiece(7, 8);
+
+        assertTrue(game.tryMerge(7, 7));
+        assertEquals(Constants.BLACK, game.getBoard()[6][7]);
+        assertEquals(Constants.BLACK, game.getBoard()[8][7]);
+    }
 }
