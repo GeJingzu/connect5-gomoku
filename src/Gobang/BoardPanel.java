@@ -113,7 +113,7 @@ class BoardPanel extends JPanel implements MouseListener {
 
     //Start a new game (without timer)
     private void startNewGame() {
-        logic.reset(); // Reset game logic
+        gameState.reset(); // Reset game logic
         blackTime = 300;
         whiteTime = 300;
         blackTimeText = "05:00";
@@ -131,13 +131,13 @@ class BoardPanel extends JPanel implements MouseListener {
 
     //Clear the chessboard and refresh the interface
     public void clearBoard(){
-        logic.reset(); //Use logic's reset method.
+        gameState.reset(); //Use logic's reset method.
         repaint();
     }
 
 
     private void checkWinOrDraw(int row, int col, int color) {
-        if (logic.checkWin(row, col, color)) {
+        if (gameState.checkWin(row, col, color)) {
             canPlay = false;
             String winner = (color == 1) ? "Black" : "White";
             int result = JOptionPane.showConfirmDialog(this,
@@ -148,7 +148,7 @@ class BoardPanel extends JPanel implements MouseListener {
                 clearBoard();
                 startNewGame();
             }
-        } else if (logic.isFull()) {
+        } else if (gameState.isFull()) {
             canPlay = false;
             int result = JOptionPane.showConfirmDialog(this,
                     "Draw! Board is full.\nStart over?",
@@ -206,7 +206,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         // Draw pieces using logic.getBoard()
-        int[][] board = logic.getBoard();
+        int[][] board = gameState.getBoard();
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 int piece = board[r][c];
@@ -287,7 +287,7 @@ class BoardPanel extends JPanel implements MouseListener {
         // Current round instruction
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
         if (canPlay) {
-            int currentTurn = logic.getCurrentTurn();
+            int currentTurn = gameState.getCurrentTurn();
             if (currentTurn == 1) {
                 g.setColor(Color.BLACK);
                 g.drawString("▼ Black Turn ▼", 280, 550);
@@ -299,14 +299,14 @@ class BoardPanel extends JPanel implements MouseListener {
 
         // Display time value placeholders (The display "--: --" indicates that the timing function has not been realized yet)
         g.setFont(new Font("Monospaced", Font.BOLD, 16));
-        if (logic.getCurrentTurn() == 1 && canPlay) {
+        if (gameState.getCurrentTurn() == 1 && canPlay) {
             g.setColor(Color.RED);
         } else {
             g.setColor(Color.GRAY);
         }
         g.drawString(blackTimeText, 524, 89);
 
-        if (logic.getCurrentTurn() == 2 && canPlay) {
+        if (gameState.getCurrentTurn() == 2 && canPlay) {
             g.setColor(Color.RED);
         } else {
             g.setColor(Color.GRAY);
@@ -371,7 +371,7 @@ class BoardPanel extends JPanel implements MouseListener {
             }
 
             // Get the current turn (the chess pieces that AI should play in the current turn)
-            int aiColor = logic.getCurrentTurn();
+            int aiColor = gameState.getCurrentTurn();
 
             int[] aiMove = ai.makeMove(aiColor);
 
