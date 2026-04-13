@@ -121,12 +121,32 @@ class BoardPanel extends JPanel implements MouseListener {
         blackTimeText = "--:--";
         whiteTimeText = "--:--";
         canPlay = true;
+        blackTime = 300;
+        whiteTime = 300;
+        blackTimeText = "05:00";
+        whiteTimeText = "05:00";
+        isBlackTurn = true;
+        repaint();
+        // Restart timer
+        if (timer.isRunning()) {
+            timer.stop();
+        }
+        timer.start();
+    }
+
+    /**
+     * Called when switching players to ensure that the timer is normal
+     */
+    private void switchTurn() {
+        isBlackTurn = !isBlackTurn;
+        // The timer will automatically time the new player at the next tick
         repaint();
     }
 
     //Clear the chessboard and refresh the interface
     public void clearBoard(){
         logic.reset(); //Use logic's reset method.
+        isBlackTurn = true;
         repaint();
     }
 
@@ -276,6 +296,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawString("WHITE TIME:", 220, 90);
         g.drawString("BLACK TIME:", 420, 90);
 
+
         // Current round instruction
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
         if (canPlay) {
@@ -291,9 +312,21 @@ class BoardPanel extends JPanel implements MouseListener {
 
         // Display time value placeholders (The display "--: --" indicates that the timing function has not been realized yet)
         g.setFont(new Font("Monospaced", Font.BOLD, 16));
-        g.setColor(Color.GRAY);
+        if (isBlackTurn && canPlay) {
+            g.setColor(Color.RED);
+        } else {
+            g.setColor(Color.GRAY);
+        }
         g.drawString(blackTimeText, 524, 89);
+
+        if (!isBlackTurn && canPlay) {
+            g.setColor(Color.RED);
+        } else {
+            g.setColor(Color.GRAY);
+        }
         g.drawString(whiteTimeText, 322, 89);
+
+
     }
 
     @Override
