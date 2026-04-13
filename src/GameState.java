@@ -1,3 +1,5 @@
+//Main game controller
+//Connects board,history,and merge system
 public class GameState {
     private int[][] board;
     private int currentPlayer;
@@ -6,8 +8,7 @@ public class GameState {
     private HistoryManager history;
     private MergeSystem mergeSystem;
 
-
-    public int gameMode = 0;
+    public int gameMode = 0;  // 0: Classic, 1: Merging Mode
 
     public GameState() {
         board = new int[Constants.BOARD_SIZE][Constants.BOARD_SIZE];
@@ -28,10 +29,24 @@ public class GameState {
         history.clear();
     }
 
+    public boolean placePiece(int row, int col) {
+        if (gameOver || !isValid(row, col)) return false;
+
+        history.recordMove(row, col, currentPlayer, board);
+        board[row][col] = currentPlayer;
+
+        if (checkWin(row, col)) {
+            gameOver = true;
+            winner = currentPlayer;
+        } else {
+            switchPlayer();
+        }
+        return true;
+    }
 
     public boolean placePiece(int row, int col, int color) {
-        if (gameOver) return false;
 
+        if (gameOver) return false;
         if (color != currentPlayer) return false;
         if (!isValid(row, col)) return false;
 
@@ -63,6 +78,7 @@ public class GameState {
         return true;
     }
 
+
     public boolean placePieceWithMode(int row, int col, int color) {
         if (gameOver) return false;
         if (color != currentPlayer) return false;
@@ -72,9 +88,11 @@ public class GameState {
         }
 
         else {
+
             if (board[row][col] == currentPlayer) {
                 return tryMerge(row, col);
             }
+
             else if (board[row][col] == Constants.EMPTY) {
                 return placePiece(row, col, color);
             }
@@ -86,6 +104,7 @@ public class GameState {
         if (!history.canUndo()) return false;
         int[][] prev = history.undo();
         if (prev == null) return false;
+
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
             board[i] = prev[i].clone();
         }
@@ -99,7 +118,11 @@ public class GameState {
         if (!history.canRedo()) return false;
         HistoryManager.Step step = history.redo();
         if (step == null) return false;
-        board[step.row][step.col] = step.player;
+
+        for (int i = 0; i < Constants.BOARD_SIZE; i++) {
+            board[i] = step.boardSnapshot[i].clone();
+        }
+
         switchPlayer();
         return true;
     }
@@ -124,7 +147,8 @@ public class GameState {
     }
 
     private void switchPlayer() {
-        currentPlayer = (currentPlayer == Constants.BLACK) ? Constants.WHITE : Constants.BLACK;
+        currentPlayer = (currentPlayer == Constants.BLACK) ?
+                Constants.WHITE : Constants.BLACK;
     }
 
     private boolean checkWin(int row, int col) {
@@ -186,8 +210,8 @@ public class GameState {
         int r, c;
         if (isFull()) return null;
         while (true) {
-            r = rand.nextInt(15);
-            c = rand.nextInt(15);
+            r = rand.nextInt(Constants.BOARD_SIZE);
+            c = rand.nextInt(Constants.BOARD_SIZE);
             if (board[r][c] == Constants.EMPTY) {
                 placePiece(r, c, aiColor);
                 return new int[]{r, c};
