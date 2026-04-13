@@ -1,7 +1,7 @@
 //Main game controller
 //Connects board,history,and merge system
 public class GameState {
-    private int[][] board;
+    private Gomokulogic logic;
     private int currentPlayer;
     private boolean gameOver;
     private int winner;
@@ -10,12 +10,12 @@ public class GameState {
 
     public int gameMode = 0;  // 0: Classic, 1: Merging Mode
 
-    public GameState() {
-        board = new int[Constants.BOARD_SIZE][Constants.BOARD_SIZE];
+    public GameState(Gomokulogic logic) {
+        this.logic = logic;
         history = new HistoryManager();
         mergeSystem = new MergeSystem();
-        reset();
     }
+    int[][] board = logic.getBoard();
 
     public void reset() {
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
@@ -44,21 +44,16 @@ public class GameState {
         return true;
     }
 
-    public boolean placePiece(int row, int col, int color) {
+    public boolean placePiece(int row, int col) {
+        int[][] board = logic.getBoard();
 
-        if (gameOver) return false;
-        if (color != currentPlayer) return false;
-        if (!isValid(row, col)) return false;
+        if (!logic.placePiece(row, col)) return false;
 
-        history.recordMove(row, col, currentPlayer, board);
-        board[row][col] = currentPlayer;
-
-        if (checkWin(row, col)) {
-            gameOver = true;
-            winner = currentPlayer;
-        } else {
-            switchPlayer();
+        // merge（额外逻辑）
+        if (mergeSystem.canMerge(board, row, col, logic.getCurrentPlayer())) {
+            mergeSystem.executeMerge(board, row, col, logic.getCurrentPlayer());
         }
+
         return true;
     }
 
