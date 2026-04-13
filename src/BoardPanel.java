@@ -287,7 +287,7 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"CLASSIC MODE" BUTTON
         if (e.getX() >= 466 && e.getX() <= 531 && e.getY() >= 24 && e.getY() <= 50) {
-            logic.gameMode = 0;
+            mergeSystem.setClassic(); //We can also use "logic.gameMode = 0;" this Statement. Because I added many branches on the basis of Yutian Wang. Because we do it separately, there are more repetitions.
             JOptionPane.showMessageDialog(this, "Switched to CLASSIC MODE");
             repaint();
             return;
@@ -295,7 +295,7 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"MERGE" BUTTON
         if (e.getX() >= 547 && e.getX() <= 611 && e.getY() >= 23 && e.getY() <= 49) {
-            logic.gameMode = 1;
+            mergeSystem.setMerge(); //We can also use "logic.gameMode = 1;" this Statement. Because I added many branches on the basis of Yutian Wang. Because we do it separately, there are more repetitions.
             JOptionPane.showMessageDialog(this, "Switched to MERGE MODE\nYou can now merge pieces of same color!");
             repaint();
             return;
