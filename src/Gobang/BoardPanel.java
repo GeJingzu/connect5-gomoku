@@ -106,7 +106,6 @@ class BoardPanel extends JPanel implements MouseListener {
         history = new HistoryManager(logic);
         mergeSystem = new MergeSystem(logic);
         setBackground(Color.WHITE);
-        this.addMouseListener(this);
         timer = new Timer(1000, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -164,9 +163,8 @@ class BoardPanel extends JPanel implements MouseListener {
         }
     }
 
-    /**
-     * Draw chessboard buttons, text, chessboard structure.
-     */
+    //Draw chessboard buttons, text, chessboard structure.
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g); //Background security refresh
@@ -329,7 +327,6 @@ class BoardPanel extends JPanel implements MouseListener {
             JOptionPane.showMessageDialog(this, "Then the game starts now!");
             clearBoard();
             startNewGame();
-            gameState.startGame();
             canPlay = true; // Start the game to play chess
             return;
         }
@@ -445,8 +442,8 @@ class BoardPanel extends JPanel implements MouseListener {
             return;
         }
 
-        int col = Math.round((mouseX - 170) / (float) cellSize);
-        int row = Math.round((mouseY - 118) / (float) cellSize);
+        int col = (mouseX - 170 + cellSize / 2) / cellSize;
+        int row = (mouseY - 118 + cellSize / 2) / cellSize;
 
         // Boundary check
         if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
@@ -462,7 +459,7 @@ class BoardPanel extends JPanel implements MouseListener {
         if (existingPiece == 0) {
             //Empty seat, you can go down
             canPlace = true;
-        } else if (logic.gameMode == 1 && existingPiece == currentColor) {
+        } else if (logic.gameMode == 1 && (existingPiece == currentColor || existingPiece == currentColor + 10)) {
             //Merge mode: you can merge on your own chess pieces
             canPlace = true;
         } else {
