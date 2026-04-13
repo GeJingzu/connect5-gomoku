@@ -229,7 +229,8 @@ class BoardPanel extends JPanel implements MouseListener {
         if (e.getX() >= 19 && e.getX() <= 104 && e.getY() >= 111 && e.getY() <= 135) {
             JOptionPane.showMessageDialog(this, "Then the game starts now!");
             clearBoard();
-            startNewGame(); // Start the game to play chess
+            gameState.startGame();
+            canPlay = true; // Start the game to play chess
             return;
         }
 
