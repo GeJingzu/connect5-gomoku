@@ -5,6 +5,18 @@ public class MergeSystem {
     private Gomokulogic logic;
 
     public MergeSystem(Gomokulogic logic){
+        this.logic = logic;
+    }
 
+    public void setClassic(){
+        logic.gameMode = CLASSIC;
+    }
+
+    public void setMerge() {
+        logic.gameMode = MERGE;
+    }
+
+    public int getMode() {
+        return logic.gameMode;
     }
 }
