@@ -2,8 +2,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameStateTest {
 
@@ -25,5 +24,19 @@ public class GameStateTest {
         }
         assertEquals(Constants.BLACK, game.getCurrentPlayer());
         assertFalse(game.isGameOver());
+    }
+    @Test
+    @DisplayName("Can place piece")
+    public void testPlace() {
+        assertTrue(game.placePiece(7, 7));
+        assertEquals(Constants.BLACK, game.getBoard()[7][7]);
+        assertEquals(Constants.WHITE, game.getCurrentPlayer());
+    }
+
+    @Test
+    @DisplayName("Cannot place on occupied")
+    public void testOccupied() {
+        game.placePiece(7, 7);
+        assertFalse(game.placePiece(7, 7));
     }
 }
