@@ -18,8 +18,80 @@ class BoardPanel extends JPanel implements MouseListener {
     private boolean canPlay = false;
 
     // Implementation of countdown function
-    private String blackTimeText = "--:--";
-    private String whiteTimeText = "--:--";
+    private int blackTime = 300; // The remaining time of black side (this is just the beginning), the initial is 5 minutes
+    private int whiteTime = 300; // The remaining time of black side (this is just the beginning), the initial is 5 minutes
+    private Timer timer; //Swing Timer
+
+    //Text showing time(Initial)
+    private String blackTimeText = "05:00";
+    private String whiteTimeText = "05:00";
+
+
+    public BoardPanel() {
+        setBackground(Color.WHITE);
+        this.addMouseListener(this);
+        timer = new Timer(1000, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                updateTimer();
+            }
+        });
+    }
+
+    //Update countdown
+    private void updateTimer(){
+        if (!canPlay){
+            return;//If the game does not start, the time will not be counted
+        }
+        if(isBlackTurn){
+            if(blackTime > 0){
+                blackTime--;
+                updateTimeDisplay();
+                repaint();
+                // When the time runs out, the black side will judge the negative in case of overtime
+                if (blackTime == 0) {
+                    timer.stop();
+                    canPlay = false;
+                    int result = JOptionPane.showConfirmDialog(this,
+                            "Black timeout! White side wins!\n" +
+                                    "Start over?",
+                            "Overtime negative judgment",
+                            JOptionPane.YES_NO_OPTION);
+                    if (result == JOptionPane.YES_OPTION) {
+                        clearBoard();
+                        startNewGame();
+                    }
+                }
+            }
+        } else {
+
+            if (whiteTime > 0) {
+                whiteTime--;
+                updateTimeDisplay();
+                repaint();
+
+                if (whiteTime == 0) {
+                    timer.stop();
+                    canPlay = false;
+                    int result = JOptionPane.showConfirmDialog(this,
+                            "White timeout! Black side wins!\n" +
+                                    "Start over?",
+                            "Overtime negative judgment",
+                            JOptionPane.YES_NO_OPTION);
+                    if (result == JOptionPane.YES_OPTION) {
+                        clearBoard();
+                        startNewGame();
+                    }
+                }
+            }
+        }
+    }
+
+    //Update time display text
+    private void updateTimeDisplay(){
+        blackTimeText = formatTime(blackTime);
+        whiteTimeText = formatTime(whiteTime);
+    }
 
     private int startX = 130;
     private int startY = 100;
