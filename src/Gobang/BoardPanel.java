@@ -180,9 +180,10 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawRect(15,487,95,26); //Make a rectangle
         g.drawRect(18,185,120,26); //Make a rectangle
         g.drawRect(206,36,80,26); //Make a rectangle
-        g.drawRect(455,4,163,64); //Make a rectangle
-        g.drawRect(466,23,65,28); //Make a rectangle
+        g.drawRect(358,1,275,66); //Make a rectangle
+        g.drawRect(457,23,80,28); //Make a rectangle
         g.drawRect(547,23,65,28); //Make a rectangle
+        g.drawRect(376,23,70,28); //Make a rectangle
 
         //Draw a checkerboard grid
         int cellSize = 380 / (SIZE-1);
@@ -258,13 +259,14 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawString("RESTART THE GAME", 20, 205);
 
         g.setColor(Color.RED);
-        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 9));
-        g.drawString("CLASSIC MODE", 465, 40);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 10));
+        g.drawString("CLASSIC MODE", 458, 40);
         g.drawString("MERGE", 562, 40);
+        g.drawString("END GAME", 385, 40);
 
         g.setColor(Color.GREEN);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 13));
-        g.drawString("(MODE)", 516, 16);
+        g.drawString("(MODE)", 461, 16);
 
         g.setColor(Color.BLUE);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
@@ -396,6 +398,11 @@ class BoardPanel extends JPanel implements MouseListener {
             JOptionPane.showMessageDialog(this, "Switched to MERGE MODE\nYou can now merge pieces of same color!");
             repaint();
             return;
+        }
+
+        //"END GAME(MODE)" BUTTON
+        if(e.getX() >= 377 && e.getX() <= 447 && e.getY() >= 23 && e.getY() <= 50){
+
         }
 
         //'END THE GAME'BUTTON
