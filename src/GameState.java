@@ -5,18 +5,16 @@ public class GameState {
     private int currentPlayer;
     private boolean gameOver;
     private int winner;
-
     private HistoryManager history;
-    private MergeSystem merge;  // Field - created in constructor
+    private MergeSystem mergeSystem;
 
     public GameState() {
         board = new int[Constants.BOARD_SIZE][Constants.BOARD_SIZE];
         history = new HistoryManager();
-        merge = new MergeSystem();  // Initialize here
+        mergeSystem = new MergeSystem();
         reset();
     }
 
-    // Start fresh game
     public void reset() {
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
             for (int j = 0; j < Constants.BOARD_SIZE; j++) {
@@ -29,7 +27,6 @@ public class GameState {
         history.clear();
     }
 
-    // Place a piece normally
     public boolean placePiece(int row, int col) {
         if (gameOver || !isValid(row, col)) return false;
 
@@ -45,20 +42,12 @@ public class GameState {
         return true;
     }
 
-    private void switchPlayer() {
-    }
-
-    private boolean checkWin(int row, int col) {
-        return false;
-    }
-
-    // Try to merge at position
     public boolean tryMerge(int row, int col) {
         if (gameOver || board[row][col] != currentPlayer) return false;
-        if (!merge.canMerge(board, row, col, currentPlayer)) return false;
+        if (!mergeSystem.canMerge(board, row, col, currentPlayer)) return false;
 
         history.recordMove(row, col, currentPlayer, board);
-        merge.executeMerge(board, row, col, currentPlayer);
+        mergeSystem.executeMerge(board, row, col, currentPlayer);
 
         if (checkWin(row, col)) {
             gameOver = true;
@@ -93,7 +82,6 @@ public class GameState {
         return true;
     }
 
-    // Load a puzzle level
     public void loadEndgame(EndgameLoader.Level level) {
         reset();
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
@@ -102,11 +90,9 @@ public class GameState {
         currentPlayer = level.firstPlayer;
     }
 
-    // Check if merge is possible at this position
     public boolean canMergeAt(int row, int col) {
-        // Use 'merge' field, don't create new variable
         return board[row][col] == currentPlayer &&
-                merge.canMerge(board, row, col, currentPlayer);
+                mergeSystem.canMerge(board, row, col, currentPlayer);
     }
 
     private boolean isValid(int row, int col) {
@@ -114,4 +100,46 @@ public class GameState {
                 col >= 0 && col < Constants.BOARD_SIZE &&
                 board[row][col] == Constants.EMPTY;
     }
+
+    private void switchPlayer() {
+        currentPlayer = (currentPlayer == Constants.BLACK) ?
+                Constants.WHITE : Constants.BLACK;
+    }
+
+    private boolean checkWin(int row, int col) {
+        int p = board[row][col];
+        if (p == Constants.EMPTY) return false;
+
+        int[][] dirs = {{0,1}, {1,0}, {1,1}, {1,-1}};
+        for (int[] d : dirs) {
+            int count = 1;
+            int dr = d[0], dc = d[1];
+
+            int r = row + dr, c = col + dc;
+            while (inBounds(r,c) && board[r][c] == p) { count++; r+=dr; c+=dc; }
+
+            r = row - dr; c = col - dc;
+            while (inBounds(r,c) && board[r][c] == p) { count++; r-=dr; c-=dc; }
+
+            if (count >= 5) return true;
+        }
+        return false;
+    }
+
+    private boolean inBounds(int r, int c) {
+        return r >= 0 && r < Constants.BOARD_SIZE && c >= 0 && c < Constants.BOARD_SIZE;
+    }
+
+    public int[][] getBoard() {
+        int[][] copy = new int[board.length][];
+        for (int i = 0; i < board.length; i++) copy[i] = board[i].clone();
+        return copy;
+    }
+
+    public int getCurrentPlayer() { return currentPlayer; }
+    public boolean isGameOver() { return gameOver; }
+    public int getWinner() { return winner; }
+    public boolean canUndo() { return history.canUndo(); }
+    public boolean canRedo() { return history.canRedo(); }
+    public int getStepCount() { return history.getStepCount(); }
 }
