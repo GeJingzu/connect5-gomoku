@@ -27,17 +27,6 @@ class BoardPanel extends JPanel implements MouseListener {
     private String whiteTimeText = "05:00";
 
 
-    public BoardPanel() {
-        setBackground(Color.WHITE);
-        this.addMouseListener(this);
-        timer = new Timer(1000, new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                updateTimer();
-            }
-        });
-    }
-
     //Update countdown
     private void updateTimer(){
         if (!canPlay){
@@ -93,6 +82,13 @@ class BoardPanel extends JPanel implements MouseListener {
         whiteTimeText = formatTime(whiteTime);
     }
 
+    //Format time display
+    private String formatTime(int seconds){
+        int minutes = seconds / 60;
+        int secs = seconds % 60;
+        return String.format("%02d:%02d", minutes, secs);
+    }
+
     private int startX = 130;
     private int startY = 100;
 
@@ -109,6 +105,14 @@ class BoardPanel extends JPanel implements MouseListener {
         gameState = new GameState();
         history = new HistoryManager(logic);
         mergeSystem = new MergeSystem(logic);
+        setBackground(Color.WHITE);
+        this.addMouseListener(this);
+        timer = new Timer(1000, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                updateTimer();
+            }
+        });
     }
 
     //Start a new game (without timer)
