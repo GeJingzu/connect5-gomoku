@@ -190,6 +190,38 @@ public class Gomokulogic {
         moveHistory.clear();
 
     }
+
+    public void setPiece(int row, int col, int value) {
+        if (row >= 0 && row < 15 && col >= 0 && col < 15) {
+            board[row][col] = value;
+        }
+    }
+
+    //New: Set current player
+    public void setCurrentTurn(int turn) {
+        currentTurn = turn;
+    }
+
+    //New: Loading endgame chessboard
+    public boolean loadEndgame(int[][] endgameBoard) {
+        if (endgameBoard == null) {
+            return false;
+        }
+        //Reset game
+        reset();
+        //Load the endgame chessboard
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (endgameBoard[i][j] != 0) {
+                    board[i][j] = endgameBoard[i][j];
+                }
+            }
+        }
+
+        currentTurn = 1;
+        return true;
+    }
+
 }
 
 

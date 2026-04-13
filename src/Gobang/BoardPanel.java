@@ -93,7 +93,6 @@ class BoardPanel extends JPanel implements MouseListener {
     private int startY = 100;
 
     private SimpleAI ai;
-    private GameState gameState;
     private HistoryManager history;
     private MergeSystem mergeSystem;
 
@@ -101,7 +100,6 @@ class BoardPanel extends JPanel implements MouseListener {
         setBackground(Color.WHITE);
         this.addMouseListener(this);
         logic = new Gomokulogic(); // Initialize game logic.
-        gameState = new GameState(logic);
         setBackground(Color.WHITE);
         timer = new Timer(1000, new ActionListener(){
             @Override
@@ -113,7 +111,7 @@ class BoardPanel extends JPanel implements MouseListener {
 
     //Start a new game (without timer)
     private void startNewGame() {
-        gameState.reset(); // Reset game logic
+        logic.reset(); // Reset game logic
         blackTime = 300;
         whiteTime = 300;
         blackTimeText = "05:00";
@@ -131,13 +129,13 @@ class BoardPanel extends JPanel implements MouseListener {
 
     //Clear the chessboard and refresh the interface
     public void clearBoard(){
-        gameState.reset(); //Use logic's reset method.
+        logic.reset(); //Use logic's reset method.
         repaint();
     }
 
 
     private void checkWinOrDraw(int row, int col, int color) {
-        if (gameState.checkWin(row, col, color)) {
+        if (logic.checkWin(row, col, color)) {
             canPlay = false;
             String winner = (color == 1) ? "Black" : "White";
             int result = JOptionPane.showConfirmDialog(this,
@@ -148,7 +146,7 @@ class BoardPanel extends JPanel implements MouseListener {
                 clearBoard();
                 startNewGame();
             }
-        } else if (gameState.isFull()) {
+        } else if (logic.isFull()) {
             canPlay = false;
             int result = JOptionPane.showConfirmDialog(this,
                     "Draw! Board is full.\nStart over?",
@@ -206,7 +204,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         // Draw pieces using logic.getBoard()
-        int[][] board = gameState.getBoard();
+        int[][] board = logic.getBoard();
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 int piece = board[r][c];
@@ -287,7 +285,7 @@ class BoardPanel extends JPanel implements MouseListener {
         // Current round instruction
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
         if (canPlay) {
-            int currentTurn = gameState.getCurrentTurn();
+            int currentTurn = logic.getCurrentTurn();
             if (currentTurn == 1) {
                 g.setColor(Color.BLACK);
                 g.drawString("▼ Black Turn ▼", 280, 550);
@@ -299,14 +297,14 @@ class BoardPanel extends JPanel implements MouseListener {
 
         // Display time value placeholders (The display "--: --" indicates that the timing function has not been realized yet)
         g.setFont(new Font("Monospaced", Font.BOLD, 16));
-        if (gameState.getCurrentTurn() == 1 && canPlay) {
+        if (logic.getCurrentTurn() == 1 && canPlay) {
             g.setColor(Color.RED);
         } else {
             g.setColor(Color.GRAY);
         }
         g.drawString(blackTimeText, 524, 89);
 
-        if (gameState.getCurrentTurn() == 2 && canPlay) {
+        if (logic.getCurrentTurn() == 2 && canPlay) {
             g.setColor(Color.RED);
         } else {
             g.setColor(Color.GRAY);
@@ -371,7 +369,7 @@ class BoardPanel extends JPanel implements MouseListener {
             }
 
             // Get the current turn (the chess pieces that AI should play in the current turn)
-            int aiColor = gameState.getCurrentTurn();
+            int aiColor = logic.getCurrentTurn();
 
             int[] aiMove = ai.makeMove(aiColor);
 
@@ -400,7 +398,41 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"END GAME(MODE)" BUTTON
         if(e.getX() >= 377 && e.getX() <= 447 && e.getY() >= 23 && e.getY() <= 50){
+            //Open file selector
+            JFileChooser fileChooser = new JFileChooser(".");
+            fileChooser.setDialogTitle("Select Endgame File");
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Text Files", "txt"));
 
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+
+                //Directly use EndgameLoader to load the endgame
+                int[][] endgameBoard = EndgameLoader.loadEndgame(filePath);
+
+                if (endgameBoard != null) {
+                    //Load into Logic
+                    logic.loadEndgame(endgameBoard);
+
+                    //Reset timer
+                    blackTime = 300;
+                    whiteTime = 300;
+                    updateTimeDisplay();
+                    canPlay = true;
+                    repaint();
+
+                    //Restart timer
+                    if (timer.isRunning()) {
+                        timer.stop();
+                    }
+                    timer.start();
+
+                    JOptionPane.showMessageDialog(this, "Endgame loaded successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Failed to load endgame file!\nPlease check file format.");
+                }
+            }
+            return;
         }
 
         //'END THE GAME'BUTTON
