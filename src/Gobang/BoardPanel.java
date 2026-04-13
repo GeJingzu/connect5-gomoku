@@ -101,10 +101,7 @@ class BoardPanel extends JPanel implements MouseListener {
         setBackground(Color.WHITE);
         this.addMouseListener(this);
         logic = new Gomokulogic(); // Initialize game logic.
-        ai = new SimpleAI(logic);
-        gameState = new GameState();
-        history = new HistoryManager(logic);
-        mergeSystem = new MergeSystem(logic);
+        gameState = new GameState(logic);
         setBackground(Color.WHITE);
         timer = new Timer(1000, new ActionListener(){
             @Override
@@ -137,6 +134,7 @@ class BoardPanel extends JPanel implements MouseListener {
         logic.reset(); //Use logic's reset method.
         repaint();
     }
+
 
     private void checkWinOrDraw(int row, int col, int color) {
         if (logic.checkWin(row, col, color)) {

@@ -14,6 +14,7 @@ public class Gomokulogic {
 
     // Add a stack to record the history of playing chess for repentance. Array save: [row, col, color, type] (type 0=normal drop, 1=fusion drop)
     private Stack<int[]> moveHistory;
+
     // Constructor
     public Gomokulogic() {
         board = new int[size][size];
@@ -36,6 +37,7 @@ public class Gomokulogic {
     public int getCurrentTurn() {
         return currentTurn;
     }
+
     // Method to put a piece on the board
     public boolean placePiece(int r, int c, int color) {
         // Check if the position is inside the 15x15 board
@@ -60,6 +62,7 @@ public class Gomokulogic {
         }
         return false;
     }
+
     // Switch current round
     private void switchTurn() {
         currentTurn = (currentTurn == 1) ? 2 : 1;
@@ -177,7 +180,6 @@ public class Gomokulogic {
         return true;
     }
 
-
     public void reset() {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
@@ -186,6 +188,7 @@ public class Gomokulogic {
         }
         currentTurn = 1;
         moveHistory.clear();
+
     }
 }
 
