@@ -181,4 +181,16 @@ public class Gomokulogic {
         currentTurn = 1;
         moveHistory.clear();
     }
+    // Set the board state for endgame levels
+    public void setBoard(int[][] newBoard) {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                this.board[i][j] = newBoard[i][j];
+            }
+        }
+        // Clear history stack when a new board is loaded
+        if (moveHistory != null) {
+            moveHistory.clear();
+        }
+    }
 }
