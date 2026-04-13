@@ -23,6 +23,11 @@ class BoardPanel extends JPanel implements MouseListener {
     private int startX = 130;
     private int startY = 100;
 
+    private SimpleAI ai;
+    private GameState gameState;
+    private HistoryManager history;
+    private MergeSystem mergeSystem;
+
     public BoardPanel() {
         setBackground(Color.WHITE);
         this.addMouseListener(this);
