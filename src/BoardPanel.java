@@ -299,74 +299,36 @@ class BoardPanel extends JPanel implements MouseListener {
             return;
         }
 
-        // Check if click is on the chessboard
-        if (mouseX < 170 || mouseX > 550 || mouseY < 118 || mouseY > 498) {
-            System.out.println("Click outside the chessboard, invalid");
-            return;
-        }
-
-        if (!canPlay) {
-            System.out.println("The game has not started or has ended. You can't drop pieces!");
-            JOptionPane.showMessageDialog(this, "The game has not started or has ended!");
+        //Chess board drop
+        if (mouseX < 170 || mouseX > 550 || mouseY < 118 || mouseY > 498) return;
+        if (!canPlay || gameState.isGameOver()) {
+            JOptionPane.showMessageDialog(this, "Game not started or already over!");
             return;
         }
 
         int col = Math.round((mouseX - 170) / (float) cellSize);
         int row = Math.round((mouseY - 118) / (float) cellSize);
+        if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) return;
 
-        // Boundary check
-        if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
-            return;
-        }
+        int currentColor = gameState.getCurrentPlayer();
+        boolean success = gameState.placePieceWithMode(row, col, currentColor);
 
-        int currentColor = logic.getCurrentTurn();
-        int existingPiece = logic.getPiece(row, col);
-
-        //Check whether it can be dropped
-        boolean canPlace = false;
-
-        if (existingPiece == 0) {
-            //Empty seat, you can go down
-            canPlace = true;
-        } else if (logic.gameMode == 1 && existingPiece == currentColor) {
-            //Merge mode: you can merge on your own chess pieces
-            canPlace = true;
-        } else {
-            //Other conditions: not applicable
-            JOptionPane.showMessageDialog(this, "Cannot place here!");
-            return;
-        }
-
-        if (canPlace && logic.placePiece(row, col, currentColor)) {
+        if (success) {
             repaint();
-
-            // Check win
-            if (logic.checkWin(row, col, currentColor)) {
+            if (gameState.isGameOver()) {
                 canPlay = false;
-                String winner = (currentColor == 1) ? "Black" : "White";
+                int winner = gameState.getWinner();
+                String winnerName = (winner == Constants.BLACK) ? "Black" : "White";
                 int result = JOptionPane.showConfirmDialog(this,
-                        winner + " side wins!\nStart over?",
-                        "Game Over",
-                        JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.YES_OPTION) {
-                    clearBoard();
-                    startNewGame();
-                }
-                return;
-            }
-
-            // Check draw
-            if (logic.isFull()) {
-                canPlay = false;
-                int result = JOptionPane.showConfirmDialog(this,
-                        "Draw! Board is full.\nStart over?",
-                        "Game Over",
-                        JOptionPane.YES_NO_OPTION);
+                        winnerName + " side wins!\nStart over?",
+                        "Game Over", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     clearBoard();
                     startNewGame();
                 }
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Cannot place there!");
         }
     }
 
