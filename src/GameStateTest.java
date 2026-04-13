@@ -39,4 +39,23 @@ public class GameStateTest {
         game.placePiece(7, 7);
         assertFalse(game.placePiece(7, 7));
     }
+    @Test
+    @DisplayName("Undo works")
+    public void testUndo() {
+        game.placePiece(7, 7);
+        game.placePiece(7, 8);
+
+        assertTrue(game.undo());
+        assertEquals(Constants.EMPTY, game.getBoard()[7][8]);
+    }
+
+    @Test
+    @DisplayName("Redo works")
+    public void testRedo() {
+        game.placePiece(7, 7);
+        game.undo();
+
+        assertTrue(game.redo());
+        assertEquals(Constants.BLACK, game.getBoard()[7][7]);
+    }
 }
