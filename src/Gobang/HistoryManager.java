@@ -1,4 +1,5 @@
 package Gobang;
+//Yutian Wang
 
 public class HistoryManager {
     private Gomokulogic logic;

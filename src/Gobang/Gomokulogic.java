@@ -1,5 +1,4 @@
 package Gobang;
-
 //Jingzu Ge
 
 import java.util.Stack;

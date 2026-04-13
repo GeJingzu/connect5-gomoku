@@ -1,4 +1,5 @@
 package Gobang;
+//Yutian Wang
 
 public class MergeSystem {
     public static final int CLASSIC = 0;

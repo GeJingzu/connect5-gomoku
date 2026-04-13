@@ -1,4 +1,5 @@
 package Gobang;
+//Yutian Wang
 
 import java.util.Random;
 
