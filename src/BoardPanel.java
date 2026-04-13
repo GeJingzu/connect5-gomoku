@@ -237,7 +237,7 @@ class BoardPanel extends JPanel implements MouseListener {
         //'REPENTANCE' button
         if (e.getX() >= 63 && e.getX() <= 154 && e.getY() >= 298 && e.getY() <= 324) {
             if (!canPlay) return;
-            logic.undo(); // Call repentance algorithm
+            history.undo(); // Call repentance algorithm
             repaint();
             return;
         }
