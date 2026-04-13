@@ -1,4 +1,5 @@
 
+
 /**
  * NAME:Yunlong Wang
  */
@@ -31,7 +32,8 @@ class BoardPanel extends JPanel implements MouseListener {
     //Start a new game (without timer)
     private void startNewGame() {
         logic.reset(); // Reset game logic
-        gameState.gameMode = 0;
+        blackTimeText = "--:--";
+        whiteTimeText = "--:--";
         canPlay = true;
         repaint();
     }
@@ -112,24 +114,42 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         // Draw pieces using logic.getBoard()
-        int[][] board = gameState.getBoard();
+        int[][] board = logic.getBoard();
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 int piece = board[r][c];
-                if (piece != Constants.EMPTY) {
+                if (piece != 0) {
                     int x = 170 + c * cellSize;
                     int y = 118 + r * cellSize;
 
-                    if (piece == Constants.BLACK) {
+                    //Judge the type of chess pieces
+                    if (piece == 1 || piece == 11) {
+                        //Black chess (including the merged black chess)
                         g.setColor(Color.BLACK);
                         g.fillOval(x - 10, y - 10, 20, 20);
                         g.setColor(Color.BLACK);
                         g.drawOval(x - 10, y - 10, 20, 20);
-                    } else if (piece == Constants.WHITE) {
+
+                        //If the pieces are merged, draw ★ mark
+                        if (piece == 11) {
+                            g.setColor(Color.RED);
+                            g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+                            g.drawString("★", x - 4, y + 5);
+                        }
+                    }
+                    else if (piece == 2 || piece == 12) {
+                        //White (including the merged white)
                         g.setColor(Color.WHITE);
                         g.fillOval(x - 10, y - 10, 20, 20);
                         g.setColor(Color.BLACK);
                         g.drawOval(x - 10, y - 10, 20, 20);
+
+                        //If the pieces are merged, draw ★ mark
+                        if (piece == 12) {
+                            g.setColor(Color.RED);
+                            g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
+                            g.drawString("★", x - 4, y + 5);
+                        }
                     }
                 }
             }
@@ -164,11 +184,17 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawOval(60,295,100,40);
         g.drawOval(60,252,100,40);
 
+        // Show countdown display frame
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
+        g.setColor(Color.BLACK);
+        g.drawString("WHITE TIME:", 220, 90);
+        g.drawString("BLACK TIME:", 420, 90);
+
         // Current round instruction
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
-        if (canPlay && !gameState.isGameOver()) {
-            int currentTurn = gameState.getCurrentPlayer();
-            if (currentTurn == Constants.BLACK) {
+        if (canPlay) {
+            int currentTurn = logic.getCurrentTurn();
+            if (currentTurn == 1) {
                 g.setColor(Color.BLACK);
                 g.drawString("▼ Black Turn ▼", 280, 550);
             } else {
@@ -176,6 +202,12 @@ class BoardPanel extends JPanel implements MouseListener {
                 g.drawString("▼ White Turn ▼", 280, 550);
             }
         }
+
+        // Display time value placeholders (The display "--: --" indicates that the timing function has not been realized yet)
+        g.setFont(new Font("Monospaced", Font.BOLD, 16));
+        g.setColor(Color.GRAY);
+        g.drawString(blackTimeText, 524, 89);
+        g.drawString(whiteTimeText, 322, 89);
     }
 
     @Override
@@ -195,11 +227,8 @@ class BoardPanel extends JPanel implements MouseListener {
         //'REPENTANCE' button
         if (e.getX() >= 63 && e.getX() <= 154 && e.getY() >= 298 && e.getY() <= 324) {
             if (!canPlay) return;
-            if (gameState.undo()) {
-                repaint();
-            } else {
-                JOptionPane.showMessageDialog(this, "No more steps to undo!");
-            }
+            logic.undo(); // Call repentance algorithm
+            repaint();
             return;
         }
 
@@ -228,32 +257,27 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"AI MODE" BUTTON
         if (e.getX() >= 206 && e.getX() <= 285 && e.getY() >= 36 && e.getY() <= 60) {
-            if (!canPlay || gameState.isGameOver()) {
+            //Check whether the game is in progress
+            if (!canPlay) {
                 JOptionPane.showMessageDialog(this, "Please start the game first!");
                 return;
             }
-            int aiColor = gameState.getCurrentPlayer();
-            int[] aiMove = gameState.easyAIMove(aiColor);
+
+            // Get the current turn (the chess pieces that AI should play in the current turn)
+            int aiColor = logic.getCurrentTurn();
+
+            int[] aiMove = logic.easyAIMove(aiColor);
+
             if (aiMove != null) {
                 repaint();
-                if (gameState.isGameOver()) {
-                    int winner = gameState.getWinner();
-                    String winnerName = (winner == Constants.BLACK) ? "Black" : "White";
-                    int result = JOptionPane.showConfirmDialog(this,
-                            winnerName + " side wins!\nStart over?",
-                            "Game Over", JOptionPane.YES_NO_OPTION);
-                    if (result == JOptionPane.YES_OPTION) {
-                        clearBoard();
-                        startNewGame();
-                    }
-                }
+                checkWinOrDraw(aiMove[0], aiMove[1], aiColor);
             }
             return;
         }
 
         //"CLASSIC MODE" BUTTON
         if (e.getX() >= 466 && e.getX() <= 531 && e.getY() >= 24 && e.getY() <= 50) {
-            gameState.gameMode = 0;
+            logic.gameMode = 0;
             JOptionPane.showMessageDialog(this, "Switched to CLASSIC MODE");
             repaint();
             return;
@@ -261,15 +285,15 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"MERGE" BUTTON
         if (e.getX() >= 547 && e.getX() <= 611 && e.getY() >= 23 && e.getY() <= 49) {
-            gameState.gameMode = 1;
-            JOptionPane.showMessageDialog(this, "Switched to MERGE MODE");
+            logic.gameMode = 1;
+            JOptionPane.showMessageDialog(this, "Switched to MERGE MODE\nYou can now merge pieces of same color!");
             repaint();
             return;
         }
 
         //'END THE GAME'BUTTON
         if (e.getX() >= 15 && e.getX() <= 101 && e.getY() >= 488 && e.getY() <= 512) {
-            JOptionPane.showMessageDialog(this, "We need say goodbye.");
+            JOptionPane.showMessageDialog(this, "Goodbye~");
             System.exit(0);
             return;
         }
@@ -299,36 +323,74 @@ class BoardPanel extends JPanel implements MouseListener {
             return;
         }
 
-        //Chess board drop
-        if (mouseX < 170 || mouseX > 550 || mouseY < 118 || mouseY > 498) return;
-        if (!canPlay || gameState.isGameOver()) {
-            JOptionPane.showMessageDialog(this, "Game not started or already over!");
+        // Check if click is on the chessboard
+        if (mouseX < 170 || mouseX > 550 || mouseY < 118 || mouseY > 498) {
+            System.out.println("Click outside the chessboard, invalid");
+            return;
+        }
+
+        if (!canPlay) {
+            System.out.println("The game has not started or has ended. You can't drop pieces!");
+            JOptionPane.showMessageDialog(this, "The game has not started or has ended!");
             return;
         }
 
         int col = Math.round((mouseX - 170) / (float) cellSize);
         int row = Math.round((mouseY - 118) / (float) cellSize);
-        if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) return;
 
-        int currentColor = gameState.getCurrentPlayer();
-        boolean success = gameState.placePieceWithMode(row, col, currentColor);
+        // Boundary check
+        if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
+            return;
+        }
 
-        if (success) {
+        int currentColor = logic.getCurrentTurn();
+        int existingPiece = logic.getPiece(row, col);
+
+        //Check whether it can be dropped
+        boolean canPlace = false;
+
+        if (existingPiece == 0) {
+            //Empty seat, you can go down
+            canPlace = true;
+        } else if (logic.gameMode == 1 && existingPiece == currentColor) {
+            //Merge mode: you can merge on your own chess pieces
+            canPlace = true;
+        } else {
+            //Other conditions: not applicable
+            JOptionPane.showMessageDialog(this, "Cannot place here!");
+            return;
+        }
+
+        if (canPlace && logic.placePiece(row, col, currentColor)) {
             repaint();
-            if (gameState.isGameOver()) {
+
+            // Check win
+            if (logic.checkWin(row, col, currentColor)) {
                 canPlay = false;
-                int winner = gameState.getWinner();
-                String winnerName = (winner == Constants.BLACK) ? "Black" : "White";
+                String winner = (currentColor == 1) ? "Black" : "White";
                 int result = JOptionPane.showConfirmDialog(this,
-                        winnerName + " side wins!\nStart over?",
-                        "Game Over", JOptionPane.YES_NO_OPTION);
+                        winner + " side wins!\nStart over?",
+                        "Game Over",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    clearBoard();
+                    startNewGame();
+                }
+                return;
+            }
+
+            // Check draw
+            if (logic.isFull()) {
+                canPlay = false;
+                int result = JOptionPane.showConfirmDialog(this,
+                        "Draw! Board is full.\nStart over?",
+                        "Game Over",
+                        JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     clearBoard();
                     startNewGame();
                 }
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Cannot place there!");
         }
     }
 
