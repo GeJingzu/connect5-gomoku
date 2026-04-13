@@ -32,7 +32,7 @@ class BoardPanel extends JPanel implements MouseListener {
         if (!canPlay){
             return;//If the game does not start, the time will not be counted
         }
-        if(isBlackTurn){
+        if(logic.getCurrentTurn() ==1){  //black
             if(blackTime > 0){
                 blackTime--;
                 updateTimeDisplay();
@@ -118,15 +118,13 @@ class BoardPanel extends JPanel implements MouseListener {
     //Start a new game (without timer)
     private void startNewGame() {
         logic.reset(); // Reset game logic
-        blackTimeText = "--:--";
-        whiteTimeText = "--:--";
-        canPlay = true;
         blackTime = 300;
         whiteTime = 300;
         blackTimeText = "05:00";
         whiteTimeText = "05:00";
-        isBlackTurn = true;
+        canPlay = true;
         repaint();
+
         // Restart timer
         if (timer.isRunning()) {
             timer.stop();
@@ -134,19 +132,10 @@ class BoardPanel extends JPanel implements MouseListener {
         timer.start();
     }
 
-    /**
-     * Called when switching players to ensure that the timer is normal
-     */
-    private void switchTurn() {
-        isBlackTurn = !isBlackTurn;
-        // The timer will automatically time the new player at the next tick
-        repaint();
-    }
 
     //Clear the chessboard and refresh the interface
     public void clearBoard(){
         logic.reset(); //Use logic's reset method.
-        isBlackTurn = true;
         repaint();
     }
 
@@ -312,14 +301,14 @@ class BoardPanel extends JPanel implements MouseListener {
 
         // Display time value placeholders (The display "--: --" indicates that the timing function has not been realized yet)
         g.setFont(new Font("Monospaced", Font.BOLD, 16));
-        if (isBlackTurn && canPlay) {
+        if (logic.getCurrentTurn() == 1 && canPlay) {
             g.setColor(Color.RED);
         } else {
             g.setColor(Color.GRAY);
         }
         g.drawString(blackTimeText, 524, 89);
 
-        if (!isBlackTurn && canPlay) {
+        if (logic.getCurrentTurn() == 2 && canPlay) {
             g.setColor(Color.RED);
         } else {
             g.setColor(Color.GRAY);
@@ -339,6 +328,7 @@ class BoardPanel extends JPanel implements MouseListener {
         if (e.getX() >= 19 && e.getX() <= 104 && e.getY() >= 111 && e.getY() <= 135) {
             JOptionPane.showMessageDialog(this, "Then the game starts now!");
             clearBoard();
+            startNewGame();
             gameState.startGame();
             canPlay = true; // Start the game to play chess
             return;

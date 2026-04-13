@@ -20,6 +20,15 @@ public class Gomokulogic {
         moveHistory = new Stack<>();
     }
 
+    public void printBoard() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(board[i][j] + "");
+            }
+            System.out.println();
+        }
+    }
+
     public int[][] getBoard() {
         return board;
     }
