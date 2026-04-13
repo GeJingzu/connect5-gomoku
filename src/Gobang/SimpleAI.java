@@ -1,3 +1,5 @@
+package Gobang;
+
 import java.util.Random;
 
 public class SimpleAI {

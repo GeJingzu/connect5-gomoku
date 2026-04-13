@@ -1,3 +1,5 @@
+package Gobang;
+
 public class HistoryManager {
     private Gomokulogic logic;
 
@@ -6,6 +8,6 @@ public class HistoryManager {
     }
 
     public void undo(){
-        logic.undo;
+        logic.undo();
     }
 }

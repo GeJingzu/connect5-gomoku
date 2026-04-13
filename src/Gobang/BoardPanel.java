@@ -1,5 +1,5 @@
 
-
+package Gobang;
 /**
  * NAME:Yunlong Wang
  */

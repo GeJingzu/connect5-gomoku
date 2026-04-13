@@ -1,3 +1,5 @@
+package Gobang;
+
 public class GameState {
 private boolean canPlay = false;
 public void startGame(){
