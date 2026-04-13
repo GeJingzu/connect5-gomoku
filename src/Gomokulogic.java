@@ -67,7 +67,30 @@ public class Gomokulogic {
 
     public boolean checkWin(int r,int c,int color){
         int count;
+        // transverse
+        count=1;
+        for(int i=c+1;i<size && board[r][i]==color;i++) count++;
+        for(int i=c-1;i>=0 && board[r][i]==color;i--) count++;
+        if(count>=5) return true;
 
+        // vertical
+        count=1;
+        for(int i=r+1;i<size && board[i][c]==color;i++) count++;
+        for(int i=r-1;i>=0 && board[i][c]==color;i--) count++;
+        if(count>=5) return true;
+
+        // Oblique\
+        count=1;
+        for(int i=1;r+i<size&&c+i<size&&board[r+i][c+i]==color;i++) count++;
+        for(int i=1;r-i>=0&&c-i>=0&&board[r-i][c-i]==color;i++) count++;
+        if(count>=5) return true;
+
+        // Oblique/
+        count=1;
+        for(int i=1;r+i<size&&c-i>=0&&board[r+i][c-i]==color;i++) count++;
+        for(int i=1;r-i>=0&&c+i<size&&board[r-i][c+i]==color;i++) count++;
+        return count>=5;
+    }
 
     }
 
