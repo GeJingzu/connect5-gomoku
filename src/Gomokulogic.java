@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 public class Gomokulogic {
     //Define the size of the chessboard
     private int size = 15;
@@ -7,6 +9,7 @@ public class Gomokulogic {
     public Gomokulogic() {
         board = new int[size][size];
     }
+
 
     public void printBoard() {
         for (int i = 0; i < size; i++) {
@@ -25,6 +28,7 @@ public class Gomokulogic {
             // Only place if the spot is empty (0)
             if (board[r][c] == 0) {
                 board[r][c] = color;
+
                 return true;
             } else {
                 System.out.println("Error: Spot already taken.");
