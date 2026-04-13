@@ -1,83 +1,48 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
-
-//Endgame level loader
+//Yutian Wang: Endgame Loader Module
+ //This class is responsible for reading level data from .txt files
+ //and converting it into a 2D array that the game can use.
 public class EndgameLoader {
 
-    public static class Level {
-        public final String name;
-        public final int firstPlayer;
-        public final int targetMoves;
-        public final int[][] board;
+    // Reads a text file and returns a 15x15 array.
+     //Expected file format: 15 lines, each with 15 integers separated by spaces.
+     //0 = Empty, 1 = Black, 2 = White
+     //@param filePath The path to the endgame .txt file
+     //@return A 15x15 int array, or null if loading fails
+    public static int[][] loadEndgame(String filePath) {
+        int[][] loadedBoard = new int[15][15];
 
-        public Level(String name, int firstPlayer, int targetMoves, int[][] board) {
-            this.name = name;
-            this.firstPlayer = firstPlayer;
-            this.targetMoves = targetMoves;
-            this.board = board;
-        }
-    }
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int row = 0;
 
-    private String dataPath;
+            // Read line by line until we reach 15 rows
+            while ((line = br.readLine()) != null && row < 15) {
+                // Trim spaces and split by any whitespace
+                String[] values = line.trim().split("\\s+");
 
-    public EndgameLoader(String path) {
-        this.dataPath = path;
-        new File(path).mkdirs();
-    }
-
-    public Level loadLevel(String filename) {
-        try (BufferedReader reader = new BufferedReader(
-                new FileReader(dataPath + filename))) {
-
-            String name = reader.readLine();
-            String first = reader.readLine();
-            int firstPlayer = first.equals("BLACK") ? Constants.BLACK : Constants.WHITE;
-            int targetMoves = Integer.parseInt(reader.readLine());
-
-            int[][] board = new int[Constants.BOARD_SIZE][Constants.BOARD_SIZE];
-            for (int i = 0; i < Constants.BOARD_SIZE; i++) {
-                String[] nums = reader.readLine().trim().split("\\s+");
-                for (int j = 0; j < Constants.BOARD_SIZE; j++) {
-                    board[i][j] = Integer.parseInt(nums[j]);
+                for (int col = 0; col < 15 && col < values.length; col++) {
+                    try {
+                        loadedBoard[row][col] = Integer.parseInt(values[col]);
+                    } catch (NumberFormatException e) {
+                        // If data is not a number, default to 0 (Empty)
+                        loadedBoard[row][col] = 0;
+                    }
                 }
+                row++;
             }
-
-            return new Level(name, firstPlayer, targetMoves, board);
+            System.out.println("Endgame loaded successfully from: " + filePath);
 
         } catch (IOException e) {
+            System.err.println("Error: Could not read the file. Please check the path: " + filePath);
             return null;
         }
+
+        return loadedBoard;
     }
-    public List<String> listLevels() {
-        List<String> files = new ArrayList<>();
-        File dir = new File(dataPath);
-        File[] list = dir.listFiles((d, name) -> name.endsWith(".txt"));
-        if (list != null) {
-            for (File f : list) files.add(f.getName());
-        }
-        return files;
-    }
-
-    public void createSampleLevel() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("One Move Kill\nBLACK\n1\n");
-
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                sb.append((i == 7 && j >= 5 && j <= 8) ? "1 " : "0 ");
-            }
-            sb.append("\n");
-        }
-
-        try (PrintWriter pw = new PrintWriter(new FileWriter(dataPath + "level1.txt"))) {
-            pw.print(sb.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
 
 

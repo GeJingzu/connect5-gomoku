@@ -53,14 +53,12 @@ public class MergeSystem {
         return false;
     }
 
-    /**
-     * Executes merge operation, capturing enemy pieces
-     * @param board Game board (will be modified)
-     * @param row Row of merge center
-     * @param col Column of merge center
-     * @param player Player executing merge
-     * @return List of captured piece positions [row, col]
-     */
+    // Executes merge operation, capturing enemy pieces
+     // @param board Game board (will be modified)
+     //@param row Row of merge center
+     //@param col Column of merge center
+     //@param player Player executing merge
+     //@return List of captured piece positions [row, col]
     public List<int[]> executeMerge(int[][] board, int row, int col, int player) {
         List<int[]> captured = new ArrayList<>();
         int enemy = (player == Constants.BLACK) ? Constants.WHITE : Constants.BLACK;
