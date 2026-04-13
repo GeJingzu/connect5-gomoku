@@ -276,7 +276,7 @@ class BoardPanel extends JPanel implements MouseListener {
             // Get the current turn (the chess pieces that AI should play in the current turn)
             int aiColor = logic.getCurrentTurn();
 
-            int[] aiMove = logic.easyAIMove(aiColor);
+            int[] aiMove = ai.makeMove(aiColor);
 
             if (aiMove != null) {
                 repaint();
