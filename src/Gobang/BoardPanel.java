@@ -181,8 +181,8 @@ class BoardPanel extends JPanel implements MouseListener {
         super.paintComponent(g); //Background security refresh
         //draw title picture
 
-            g.drawImage(images[0], 11, 8, 185, 80, this); //Title picture.
-            g.drawImage(images[1], 381, 7, 22, 26, this);
+            g.drawImage(images[0], 11, 8, 185, 80, this); //set Title picture.
+            g.drawImage(images[1], 381, 72, 22, 26, this); //set Clock picture
 
 
         g.setColor(Color.BLACK);
