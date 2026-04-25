@@ -1,16 +1,29 @@
+//Jingzu Ge
+
+import javax.swing.*;
+import java.util.Random;
 import java.util.Stack;
 
 public class Gomokulogic {
     //Define the size of the chessboard
     private int size = 15;
     private int[][] board;
-
+    public int gameMode = 0;// 0: Classic, 1: Merging Mode
+    private int currentTurn = 1; //1.Black 2.White
+    private Stack<int[]> moveHistory;
     //Consteuctor
     public Gomokulogic() {
         board = new int[size][size];
     }
-
-
+    public int[][] getBoard(){
+        return board;
+    }
+    public int getCurrentTurn(){
+        return currentTurn;
+    }
+    private void switchTurn(){
+        currentTurn = (currentTurn == 1) ? 2:1;
+    }
     public void printBoard() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -28,7 +41,14 @@ public class Gomokulogic {
             // Only place if the spot is empty (0)
             if (board[r][c] == 0) {
                 board[r][c] = color;
-
+                moveHistory.push(new int[]{r,c,color,0});
+                switchTurn();
+                return true;
+            } else if (gameMode == 1 && board[r][c] == color) {
+                board[r][c] = color + 10;
+                moveHistory.push(new int[]{r,c,color,1});
+                switchTurn();
+                System.out.println("Success: Merged.");
                 return true;
             } else {
                 System.out.println("Error: Spot already taken.");
@@ -39,19 +59,41 @@ public class Gomokulogic {
 
         return false; // Failed to place
     }
+    public boolean undo() {
+        if (moveHistory.isEmpty()) {
+            return false; // 无棋可悔
+        }
+        int[] lastMove = moveHistory.pop();
+        int r = lastMove[0];
+        int c = lastMove[1];
+        int type = lastMove[3];
+
+        if (type == 0) {
+            board[r][c] = 0; // 撤销普通落子
+        } else if (type == 1) {
+            board[r][c] -= 10; // 撤销融合落子
+        }
+        switchTurn(); // 撤销回合
+        return true;
+    }
+
+    private boolean isPlayer(int val, int color) {
+        // If color is 1, this returns true for 1 and 11
+        // If color is 2, this returns true for 2 and 12
+        return val == color || val == (color + 10);
+    }
 
     // Check if the game is over
     public boolean checkWin(int r, int c, int color) {
         int count;
-
         //Horizontal
         count = 1;
         for (int i = c + 1; i < 15; i++) {
-            if (board[r][i] == color) count++;
+            if (isPlayer(board[r][i], color)) count++;
             else break;
         }
         for (int i = c - 1; i >= 0; i--) {
-            if (board[r][i] == color) count++;
+            if (isPlayer(board[r][i], color)) count++;
             else break;
         }
         if (count >= 5) return true;
@@ -59,22 +101,22 @@ public class Gomokulogic {
         //Vertical
         count = 1;
         for (int i = r + 1; i < 15; i++) {
-            if (board[i][c] == color) count++;
+            if (isPlayer(board[i][c], color)) count++;
             else break;
         }
         for (int i = r - 1; i >= 0; i--) {
-            if (board[i][c] == color) count++;
+            if (isPlayer(board[i][c], color)) count++;
             else break;
         }
         if (count >= 5) return true;
         //Diagonal
         count = 1;
         for (int i = 1; r + i < 15 && c + i < 15; i++) {
-            if (board[r + i][c + i] == color) count++;
+            if (isPlayer(board[r + i][c + i], color)) count++;
             else break;
         }
         for (int i = 1; r - i >= 0 && c - i >= 0; i--) {
-            if (board[r - i][c - i] == color) count++;
+            if (isPlayer(board[r - i][c - i], color)) count++;
             else break;
         }
         if (count >= 5) return true;
@@ -82,17 +124,107 @@ public class Gomokulogic {
         //Diagonal
         count = 1;
         for (int i = 1; r + i < 15 && c - i >= 0; i++) {
-            if (board[r + i][c - i] == color) count++;
+            if (isPlayer(board[r + i][c - i] , color)) count++;
             else break;
         }
         for (int i = 1; r - i >= 0 && c + i < 15; i++) {
-            if (board[r - i][c + i] == color) count++;
+            if (isPlayer(board[r - i][c + i] , color)) count++;
             else break;
         }
         if (count >= 5) return true;
-
         return false;
     }
+
+    // Easy AI: find a random empty spot to move
+    public int[] easyAIMove(int aiColor) {
+        Random rand = new Random();
+        int r, c;
+        if (isFull())return null;
+        while (true) {
+            r = rand.nextInt(15);
+            c = rand.nextInt(15);
+
+            if (board[r][c] == 0) {
+                placePiece(r,c,aiColor);
+                return new int[]{r, c};
+            }
+        }
+    }
+    //Medium AI
+    public int[] mediumAIMove(int aiColor) {
+        if (isFull()) return null;
+
+        int opponent = (aiColor == 1) ? 2 : 1;
+        int maxScore = -1;
+        int bestR = -1;
+        int bestC = -1;
+        // Scan the whole board for empty spots
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (board[i][j] == 0) {
+                    // Total score = attack + defense
+                    int attack = evaluateScore(i, j, aiColor);
+                    int defense = evaluateScore(i, j, opponent);
+                    int currentScore = attack + defense;
+
+                    // Find the max score position
+                    if (currentScore > maxScore) {
+                        maxScore = currentScore;
+                        bestR = i;
+                        bestC = j;
+                    }
+                }
+            }
+        }
+        // Place piece if a valid spot is found
+        if (bestR != -1) {
+            placePiece(bestR, bestC, aiColor);
+            return new int[]{bestR, bestC};
+        }
+
+        return easyAIMove(aiColor); // Fallback
+    }
+
+    // Evaluate point value for a specific color at (r, c)
+    private int evaluateScore(int r, int c, int color) {
+        int total = 0;
+        // 4 directions: right, down, downright, upright
+        int[][] dirs = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
+
+        for (int[] d : dirs) {
+            int count = 1; // Assume piece placed here
+            count += countDir(r, c, d[0], d[1], color);
+            count += countDir(r, c, -d[0], -d[1], color);
+
+            // Assign weights based on consecutive length
+            if (count >= 5) total += 100000;
+            else if (count == 4) total += 10000;
+            else if (count == 3) total += 1000;
+            else if (count == 2) total += 100;
+            else if (count == 1) total += 10;
+        }
+        return total;
+    }
+
+    // Count continuous pieces in one direction
+    private int countDir(int r, int c, int dr, int dc, int color) {
+        int cnt = 0;
+        for (int i = 1; i <= 4; i++) {
+            int nr = r + dr * i;
+            int nc = c + dc * i;
+
+            // Check bounds
+            if (nr < 0 || nr >= 15 || nc < 0 || nc >= 15) break;
+
+            if (isPlayer(board[nr][nc], color)) {
+                cnt++;
+            } else {
+                break; // Stop if blocked
+            }
+        }
+        return cnt;
+    }
+
     // Get what is at (r, c)
     public int getPiece(int r, int c) {
         if (r >= 0 && r < 15 && c >= 0 && c < 15) {
@@ -100,6 +232,7 @@ public class Gomokulogic {
         }
         return -1;
     }
+
     // Check if the board is full
     public boolean isFull() {
         for (int i = 0; i < 15; i++) {
@@ -110,5 +243,28 @@ public class Gomokulogic {
             }
         }
         return true;
+    }
+
+    // Clear the board for a new game
+    public void resetBoard() {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                board[i][j] = 0;
+            }
+        }
+        currentTurn = 1;
+        moveHistory.clear();
+    }
+    // Set the board state for endgame levels
+    public void setBoard(int[][] newBoard) {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                this.board[i][j] = newBoard[i][j];
+            }
+        }
+        // Clear history stack when a new board is loaded
+        if (moveHistory != null) {
+            moveHistory.clear();
+        }
     }
 }
