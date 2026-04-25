@@ -168,21 +168,33 @@ class BoardPanel extends JPanel implements MouseListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g); //Background security refresh
         g.setColor(Color.BLACK);
+        g.drawRect(217,70,200,28); //Make a rectangle(Whit time frame)
+        g.drawRect(418,70,200,28); //Make a rectangle(Black time frame)
 
         //Draw a rectangular box
-        g.drawRect(170,118,380,380); //Make a rectangle
-        g.drawRect(19,36,100,26); //Make a rectangle
-        g.drawRect(140,36,40,26); //Make a rectangle
-        g.drawRect(217,70,200,28); //Make a rectangle
-        g.drawRect(418,70,200,28); //Make a rectangle
-        g.drawRect(19,110,85,26); //Make a rectangle
-        g.drawRect(15,487,95,26); //Make a rectangle
-        g.drawRect(18,185,120,26); //Make a rectangle
-        g.drawRect(206,36,80,26); //Make a rectangle
-        g.drawRect(358,1,275,66); //Make a rectangle
-        g.drawRect(457,23,80,28); //Make a rectangle
-        g.drawRect(547,23,65,28); //Make a rectangle
-        g.drawRect(376,23,70,28); //Make a rectangle
+        g.drawRect(170,118,380,380); //Make a rectangle(Go box)
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(2));
+        g.drawRect(15,447,40,26); //Make a rectangle(Help button)
+        g.drawRect(15,487,98,26); //Make a rectangle(End the game button)
+        g.drawRect(242,23,80,28); //Make a rectangle(AI MODE button)
+        g.drawRect(439,23,83,28); //Make a rectangle(Classic mode button)
+        g.drawRect(537,23,65,28); //Make a rectangle(Merge button)
+        g.drawRect(340,23,80,28); //Make a rectangle(END GAME button)
+        g.drawRect(18,185,128,28); //Make a rectangle(Restart the game button)
+        g.drawRect(18,287,128,28); //Make a rectangle(Repentance button)
+        g.drawRect(18,235,128,28); //Make a rectangle(Admit defeat button)
+        g.drawRect(18,138,128,28); //Make a rectangle(Start button)
+        Graphics2D g3 = (Graphics2D) g;
+        g3.setStroke(new BasicStroke(3));
+        g.setColor(Color.GRAY);
+        g.drawRect(219,3,398,65); //Make a rectangle(Frame function box 1)
+        g.drawRect(8,118,158,220); //Make a rectangle(Frame function box 2)
+        g.drawRect(8,438,158,90); //Make a rectangle(Frame function box 3)
+
+        g.setColor(Color.BLACK);
+        Graphics2D g4 = (Graphics2D) g;
+        g4.setStroke(new BasicStroke(1));
 
         //Draw a checkerboard grid
         int cellSize = 380 / (SIZE-1);
@@ -251,32 +263,32 @@ class BoardPanel extends JPanel implements MouseListener {
         //Draw title and time bar labels
         g.setColor(Color.RED);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
-        g.drawString("Five chess game", 20, 55);
-        g.drawString("Help", 145, 55);
-        g.drawString("AI MODE",220,55);
-        g.drawString("START", 42, 130);
+        g.drawString("Help", 19, 463);
+        g.drawString("AI MODE",255,42);
+        g.drawString("START", 58, 156);
         g.drawString("RESTART THE GAME", 20, 205);
+        g.drawString("ADMIT DEFEAT:", 28, 255);
+        g.drawString("REPENTANCE(Undo)", 22, 306);
+
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Brush berry", Font.BOLD, 20));
+        g.drawString("Five chess game", 20, 55);
 
         g.setColor(Color.RED);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 10));
-        g.drawString("CLASSIC MODE", 458, 40);
-        g.drawString("MERGE", 562, 40);
-        g.drawString("END GAME", 385, 40);
+        g.drawString("CLASSIC MODE", 440, 40);
+        g.drawString("MERGE", 552, 40);
+        g.drawString("END GAME", 348, 41);
 
         g.setColor(Color.GREEN);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 13));
-        g.drawString("(MODE)", 461, 16);
+        g.drawString("(MODE)", 400, 16);
 
         g.setColor(Color.BLUE);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
-        g.drawString("END THE GAME", 19, 508);
+        g.drawString("END THE GAME", 19, 505);
         g.setColor(Color.BLACK);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 9));
-        g.drawString("REPENTANCE(Undo):", 70, 320);
-        g.drawString("ADMIT DEFEAT:", 73, 276);
-        g.setColor(Color.BLUE);
-        g.drawOval(60,295,100,40);
-        g.drawOval(60,252,100,40);
 
         // Show countdown display frame
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
@@ -385,6 +397,7 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"CLASSIC MODE" BUTTON
         if (e.getX() >= 466 && e.getX() <= 531 && e.getY() >= 24 && e.getY() <= 50) {
+            clearBoard();
             mergeSystem.setClassic(); //We can also use "logic.gameMode = 0;" this Statement. Because I added many branches on the basis of Yutian Wang. Because we do it separately, there are more repetitions.
             JOptionPane.showMessageDialog(this, "Switched to CLASSIC MODE");
             repaint();
@@ -393,6 +406,7 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"MERGE" BUTTON
         if (e.getX() >= 547 && e.getX() <= 611 && e.getY() >= 23 && e.getY() <= 49) {
+            clearBoard();
             mergeSystem.setMerge(); //We can also use "logic.gameMode = 1;" this Statement. Because I added many branches on the basis of Yutian Wang. Because we do it separately, there are more repetitions.
             JOptionPane.showMessageDialog(this, "Switched to MERGE MODE\nYou can now merge pieces of same color!");
             repaint();
@@ -401,6 +415,7 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //"END GAME(MODE)" BUTTON
         if(e.getX() >= 377 && e.getX() <= 447 && e.getY() >= 23 && e.getY() <= 50){
+            clearBoard();
             //Open file selector
             JFileChooser fileChooser = new JFileChooser(".");
             fileChooser.setDialogTitle("Select Endgame File");
