@@ -6,7 +6,7 @@ public class Test {
         testMergeMode();
         testTurnSwitch();
         testUndo();
-        testEasyAI();
+        testMediumAI();
     }
 
     // Check basic place and bounds
@@ -70,9 +70,9 @@ public class Test {
     }
 
     // Check AI move
-    public static void testEasyAI() {
+    public static void testMediumAI() {
         Gomokulogic game = new Gomokulogic();
-        int[] aiMove = game.easyAIMove(2);
+        int[] aiMove = game.mediumAIMove(2);
         boolean isValid = (aiMove != null && aiMove.length == 2);
         System.out.println(isValid); // Expected: true
         if (isValid) {
