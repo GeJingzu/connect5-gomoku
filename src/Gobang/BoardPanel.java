@@ -16,7 +16,7 @@ class BoardPanel extends JPanel implements MouseListener {
     private Gomokulogic logic; //Use logic class instead of local board array.
     private int cellSize = 380/(SIZE-1); //Size of each grid.
     private boolean canPlay = false;
-    private Image titleImage;
+    private Image[] images = new Image[3];
 
     // Implementation of countdown function
     private int blackTime = 300; // The remaining time of black side (this is just the beginning), the initial is 5 minutes
@@ -101,9 +101,9 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //load picture
         try {
-            titleImage = new ImageIcon(
-                    getClass().getResource("/image/Title_picture.png")
-            ).getImage();
+            images[0] = new ImageIcon(getClass().getResource("/images/Title_picture.png")).getImage();
+            images[1] = new ImageIcon(getClass().getResource("/images/Clock_picture.png")).getImage();
+            images[2] = new ImageIcon(getClass().getResource("/images/Help_picture.png")).getImage();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -180,9 +180,10 @@ class BoardPanel extends JPanel implements MouseListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g); //Background security refresh
         //draw title picture
-        if (titleImage != null) {
-            g.drawImage(titleImage, 11, 8, 185, 80, this);
-        }
+
+            g.drawImage(images[0], 11, 8, 185, 80, this); //Title picture.
+            g.drawImage(images[1], 381, 7, 22, 26, this);
+
 
         g.setColor(Color.BLACK);
         g.drawRect(217,70,200,28); //Make a rectangle(Whit time frame)
@@ -286,10 +287,6 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawString("RESTART THE GAME", 20, 205);
         g.drawString("ADMIT DEFEAT:", 28, 255);
         g.drawString("REPENTANCE(Undo)", 22, 306);
-
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Brush berry", Font.BOLD, 20));
-        g.drawString("Five chess game", 20, 55);
 
         g.setColor(Color.RED);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 10));
