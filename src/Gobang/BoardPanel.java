@@ -16,7 +16,7 @@ class BoardPanel extends JPanel implements MouseListener {
     private Gomokulogic logic; //Use logic class instead of local board array.
     private int cellSize = 380/(SIZE-1); //Size of each grid.
     private boolean canPlay = false;
-    private Image[] images = new Image[3];
+    private Image[] images = new Image[4];
 
     // Implementation of countdown function
     private int blackTime = 300; // The remaining time of black side (this is just the beginning), the initial is 5 minutes
@@ -104,6 +104,7 @@ class BoardPanel extends JPanel implements MouseListener {
             images[0] = new ImageIcon(getClass().getResource("/images/Title_picture.png")).getImage();
             images[1] = new ImageIcon(getClass().getResource("/images/Clock_picture.png")).getImage();
             images[2] = new ImageIcon(getClass().getResource("/images/Help_picture.png")).getImage();
+            images[3] = new ImageIcon(getClass().getResource("/images/End_the_game_picture.png")).getImage();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,7 +185,8 @@ class BoardPanel extends JPanel implements MouseListener {
             g.drawImage(images[0], 11, 8, 185, 80, this); //set Title picture.
             g.drawImage(images[1], 381, 72, 22, 26, this); //set Clock picture.(next to 'White time').
             g.drawImage(images[1], 585, 72, 22, 26, this); //set Clock picture.(next to 'Black time').
-
+            g.drawImage(images[2],59,449,26,22,this); //set Help picture.
+            g.drawImage(images[3],119,489,26,22,this); //set End the game picture.
 
         g.setColor(Color.BLACK);
         g.drawRect(217,70,200,28); //Make a rectangle(Whit time frame)
@@ -192,8 +194,35 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //Draw a rectangular box
         g.drawRect(170,118,380,380); //Make a rectangle(Go box)
+
+
+        g.setColor(Color.DARK_GRAY);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setStroke(new BasicStroke(2));
+        g2.drawRoundRect(15, 447, 40, 26, 15, 15);
+        g2.drawRoundRect(15, 487, 98, 26, 15, 15);
+        g2.drawRoundRect(242, 23, 83, 28, 15, 15);
+        g2.drawRoundRect(439, 23, 83, 28, 15, 15);
+        g2.drawRoundRect(537, 23, 65, 28, 15, 15);
+        g2.drawRoundRect(340, 23, 80, 28, 15, 15);
+        g2.drawRoundRect(18, 185, 128, 28, 15, 15);
+        g2.drawRoundRect(18, 287, 128, 28, 15, 15);
+        g2.drawRoundRect(18, 235, 128, 28, 15, 15);
+        g2.drawRoundRect(18, 138, 128, 28, 15, 15);
+
+        //fill
+        g2.fillRoundRect(15, 447, 40, 26, 15, 15);
+        g2.fillRoundRect(15, 487, 98, 26, 15, 15);
+        g2.fillRoundRect(242, 23, 83, 28, 15, 15);
+        g2.fillRoundRect(439, 23, 83, 28, 15, 15);
+        g2.fillRoundRect(537, 23, 65, 28, 15, 15);
+        g2.fillRoundRect(340, 23, 80, 28, 15, 15);
+        g2.fillRoundRect(18, 185, 128, 28, 15, 15);
+        g2.fillRoundRect(18, 287, 128, 28, 15, 15);
+        g2.fillRoundRect(18, 235, 128, 28, 15, 15);
+        g2.fillRoundRect(18, 138, 128, 28, 15, 15);
+
+        g2.setStroke(new BasicStroke(2)); // 2px
+        g.drawRoundRect(18,138,128,28,15,15);
         g.drawRect(15,447,40,26); //Make a rectangle(Help button)
         g.drawRect(15,487,98,26); //Make a rectangle(End the game button)
         g.drawRect(242,23,80,28); //Make a rectangle(AI MODE button)
@@ -206,7 +235,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawRect(18,138,128,28); //Make a rectangle(Start button)
         Graphics2D g3 = (Graphics2D) g;
         g3.setStroke(new BasicStroke(3));
-        g.setColor(Color.GRAY);
+        g.setColor(Color.BLACK);
         g.drawRect(219,3,398,65); //Make a rectangle(Frame function box 1)
         g.drawRect(8,118,158,220); //Make a rectangle(Frame function box 2)
         g.drawRect(8,438,158,90); //Make a rectangle(Frame function box 3)
