@@ -14,6 +14,7 @@ public class Gomokulogic {
     //Consteuctor
     public Gomokulogic() {
         board = new int[size][size];
+        moveHistory = new Stack<>();
     }
     public int[][] getBoard(){
         return board;
