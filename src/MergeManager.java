@@ -6,7 +6,10 @@ public class MergeManager {
     // 0=Empty, 1=Black, 2=White, 3=Merged Black, 4=Merged White
     private int[][] board = new int[15][15];
 
-     //Call this method after every move to check for merge conditions.
+    public MergeManager(int[][] board) {
+    }
+
+    //Call this method after every move to check for merge conditions.
     public void checkAndExecuteMerge(int x, int y, int playerRole) {
         // Horizontal check: count same-colored pieces
         int count = 1;
@@ -27,9 +30,7 @@ public class MergeManager {
             // Step 1: Clear the basic pieces in this row
             for (int i = x - 2; i <= x + 2; i++) {
                 if (i >= 0 && i < 15 && board[i][y] == playerRole) {
-                    board[i][y] = 0;
-                    // Set to Empty
-                    // 设为空
+                    board[i][y] = 0; // Set to Empty / 设为空
                 }
             }
 

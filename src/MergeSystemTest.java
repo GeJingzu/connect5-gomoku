@@ -6,6 +6,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class MergeSystemTest {
 
@@ -20,16 +21,16 @@ public class MergeSystemTest {
     @Test
     @DisplayName("Empty position cannot merge")
     public void testEmptyCannotMerge() {
-        assertFalse("Empty position should not be able to merge",
-                mergeSystem.canMerge(board, 7, 7, 1));
+        assertFalse(mergeSystem.canMerge(board, 7, 7, 1),
+                "Empty position should not be able to merge");
     }
 
     @Test
     @DisplayName("Single piece cannot merge (need 3 consecutive)")
     public void testSingleCannotMerge() {
         board[7][7] = 1;
-        assertFalse("Single piece should not be able to merge",
-                mergeSystem.canMerge(board, 7, 7, 1));
+        assertFalse(mergeSystem.canMerge(board, 7, 7, 1),
+                "Single piece should not be able to merge");
     }
 
     @Test
@@ -37,8 +38,8 @@ public class MergeSystemTest {
     public void testTwoCannotMerge() {
         board[7][6] = 1;
         board[7][7] = 1;
-        assertFalse("2 consecutive pieces should not be able to merge",
-                mergeSystem.canMerge(board, 7, 7, 1));
+        assertFalse(mergeSystem.canMerge(board, 7, 7, 1),
+                "2 consecutive pieces should not be able to merge");
     }
     @Test
     @DisplayName("Horizontal 3 consecutive can merge")
