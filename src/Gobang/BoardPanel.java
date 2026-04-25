@@ -16,6 +16,7 @@ class BoardPanel extends JPanel implements MouseListener {
     private Gomokulogic logic; //Use logic class instead of local board array.
     private int cellSize = 380/(SIZE-1); //Size of each grid.
     private boolean canPlay = false;
+    private Image titleImage;
 
     // Implementation of countdown function
     private int blackTime = 300; // The remaining time of black side (this is just the beginning), the initial is 5 minutes
@@ -97,6 +98,17 @@ class BoardPanel extends JPanel implements MouseListener {
     private MergeSystem mergeSystem;
 
     public BoardPanel() {
+
+        //load picture
+        try {
+            titleImage = new ImageIcon(
+                    getClass().getResource("/image/Title_picture.png")
+            ).getImage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         setBackground(Color.WHITE);
         this.addMouseListener(this);
         logic = new Gomokulogic();
@@ -167,6 +179,11 @@ class BoardPanel extends JPanel implements MouseListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g); //Background security refresh
+        //draw title picture
+        if (titleImage != null) {
+            g.drawImage(titleImage, 11, 8, 185, 80, this);
+        }
+
         g.setColor(Color.BLACK);
         g.drawRect(217,70,200,28); //Make a rectangle(Whit time frame)
         g.drawRect(418,70,200,28); //Make a rectangle(Black time frame)
