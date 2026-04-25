@@ -34,7 +34,6 @@ public class MergeManager {
             }
 
             // Step 2: Place the "Merged Piece" at the current spot
-            // (1->3, 2->4)
             board[x][y] = playerRole + 2;
         }
     }
