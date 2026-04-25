@@ -195,9 +195,11 @@ class BoardPanel extends JPanel implements MouseListener {
         //Draw a rectangular box
         g.drawRect(170,118,380,380); //Make a rectangle(Go box)
 
-
         g.setColor(Color.DARK_GRAY);
         Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(15, 447, 40, 26, 15, 15);
         g2.drawRoundRect(15, 487, 98, 26, 15, 15);
         g2.drawRoundRect(242, 23, 83, 28, 15, 15);
@@ -209,9 +211,10 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.drawRoundRect(18, 235, 128, 28, 15, 15);
         g2.drawRoundRect(18, 138, 128, 28, 15, 15);
 
+        g.setColor(new Color(0, 180, 180));
         //fill
-        g2.fillRoundRect(15, 447, 40, 26, 15, 15);
-        g2.fillRoundRect(15, 487, 98, 26, 15, 15);
+        g2.fillRoundRect(15, 447, 40, 26,15,15);
+        g2.fillRoundRect(15, 487, 98, 26,15,15);
         g2.fillRoundRect(242, 23, 83, 28, 15, 15);
         g2.fillRoundRect(439, 23, 83, 28, 15, 15);
         g2.fillRoundRect(537, 23, 65, 28, 15, 15);
@@ -221,6 +224,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.fillRoundRect(18, 235, 128, 28, 15, 15);
         g2.fillRoundRect(18, 138, 128, 28, 15, 15);
 
+        g.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(2)); // 2px
         g.drawRoundRect(18,138,128,28,15,15);
         g.drawRect(15,447,40,26); //Make a rectangle(Help button)
@@ -379,8 +383,8 @@ class BoardPanel extends JPanel implements MouseListener {
         int mouseY = e.getY();
         System.out.println(mouseX + " " + mouseY);
 
-        //'START THE GAME' button
-        if (e.getX() >= 19 && e.getX() <= 104 && e.getY() >= 111 && e.getY() <= 135) {
+        //'START' button
+        if (e.getX() >= 19 && e.getX() <= 143 && e.getY() >= 137 && e.getY() <= 165) {
             JOptionPane.showMessageDialog(this, "Then the game starts now!");
             clearBoard();
             startNewGame();
@@ -389,7 +393,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         //'REPENTANCE' button
-        if (e.getX() >= 63 && e.getX() <= 154 && e.getY() >= 298 && e.getY() <= 324) {
+        if (e.getX() >= 17 && e.getX() <= 145 && e.getY() >= 287 && e.getY() <= 314) {
             if (!canPlay) return;
             history.undo(); // Call repentance algorithm
             repaint();
@@ -397,7 +401,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         //'HELP' button
-        if (e.getX() >= 140 && e.getX() <= 180 && e.getY() >= 35 && e.getY() <= 61) {
+        if (e.getX() >= 16 && e.getX() <= 53 && e.getY() >= 448 && e.getY() <= 471) {
             JOptionPane.showMessageDialog(this, "=== Five Chess Game Help ===\n\n" +
                     "【Game Rules】\n" +
                     "• You need connect 5 pieces in a line, can be horizontal, vertical or diagonal, then you win\n" +
@@ -420,7 +424,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         //"AI MODE" BUTTON
-        if (e.getX() >= 206 && e.getX() <= 285 && e.getY() >= 36 && e.getY() <= 60) {
+        if (e.getX() >= 241 && e.getX() <= 322 && e.getY() >= 23 && e.getY() <= 49) {
             //Check whether the game is in progress
             if (!canPlay) {
                 JOptionPane.showMessageDialog(this, "Please start the game first!");
@@ -440,7 +444,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         //"CLASSIC MODE" BUTTON
-        if (e.getX() >= 466 && e.getX() <= 531 && e.getY() >= 24 && e.getY() <= 50) {
+        if (e.getX() >= 438 && e.getX() <= 521 && e.getY() >= 23 && e.getY() <= 48) {
             clearBoard();
             mergeSystem.setClassic(); //We can also use "logic.gameMode = 0;" this Statement. Because I added many branches on the basis of Yutian Wang. Because we do it separately, there are more repetitions.
             JOptionPane.showMessageDialog(this, "Switched to CLASSIC MODE");
@@ -449,7 +453,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         //"MERGE" BUTTON
-        if (e.getX() >= 547 && e.getX() <= 611 && e.getY() >= 23 && e.getY() <= 49) {
+        if (e.getX() >= 539 && e.getX() <= 601 && e.getY() >= 25 && e.getY() <= 49) {
             clearBoard();
             mergeSystem.setMerge(); //We can also use "logic.gameMode = 1;" this Statement. Because I added many branches on the basis of Yutian Wang. Because we do it separately, there are more repetitions.
             JOptionPane.showMessageDialog(this, "Switched to MERGE MODE\nYou can now merge pieces of same color!");
@@ -458,7 +462,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         //"END GAME(MODE)" BUTTON
-        if(e.getX() >= 377 && e.getX() <= 447 && e.getY() >= 23 && e.getY() <= 50){
+        if(e.getX() >= 340 && e.getX() <= 418 && e.getY() >= 23 && e.getY() <= 48){
             clearBoard();
             //Open file selector
             JFileChooser fileChooser = new JFileChooser(".");
@@ -498,14 +502,14 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         //'END THE GAME'BUTTON
-        if (e.getX() >= 15 && e.getX() <= 101 && e.getY() >= 488 && e.getY() <= 512) {
+        if (e.getX() >= 15 && e.getX() <= 111 && e.getY() >= 487 && e.getY() <= 511) {
             JOptionPane.showMessageDialog(this, "Goodbye~");
             System.exit(0);
             return;
         }
 
         //'RESTART THE GAME' button
-        if (e.getX() >= 16 && e.getX() <= 139 && e.getY() >= 184 && e.getY() <= 209) {
+        if (e.getX() >= 19 && e.getX() <= 146 && e.getY() >= 186 && e.getY() <= 210) {
             JOptionPane.showMessageDialog(this, "Then the chessboard will be cleared");
             clearBoard();
             startNewGame(); // Start the game to play chess
@@ -513,7 +517,7 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         //'ADMIT DEFEAT' button
-        if (e.getX() >= 60 && e.getX() <= 155 && e.getY() >= 258 && e.getY() <= 287) {
+        if (e.getX() >= 18 && e.getX() <= 144 && e.getY() >= 235 && e.getY() <= 261) {
             int result2 = JOptionPane.showConfirmDialog(this, "Are you sure you want to admit defeat?");
             System.out.println("result2=" + result2);
             if (result2 == 0) {
