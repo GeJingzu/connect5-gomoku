@@ -150,6 +150,80 @@ public class Gomokulogic {
             }
         }
     }
+    //Medium AI
+    public int[] mediumAIMove(int aiColor) {
+        if (isFull()) return null;
+
+        int opponent = (aiColor == 1) ? 2 : 1;
+        int maxScore = -1;
+        int bestR = -1;
+        int bestC = -1;
+        // Scan the whole board for empty spots
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (board[i][j] == 0) {
+                    // Total score = attack + defense
+                    int attack = evaluateScore(i, j, aiColor);
+                    int defense = evaluateScore(i, j, opponent);
+                    int currentScore = attack + defense;
+
+                    // Find the max score position
+                    if (currentScore > maxScore) {
+                        maxScore = currentScore;
+                        bestR = i;
+                        bestC = j;
+                    }
+                }
+            }
+        }
+        // Place piece if a valid spot is found
+        if (bestR != -1) {
+            placePiece(bestR, bestC, aiColor);
+            return new int[]{bestR, bestC};
+        }
+
+        return easyAIMove(aiColor); // Fallback
+    }
+
+    // Evaluate point value for a specific color at (r, c)
+    private int evaluateScore(int r, int c, int color) {
+        int total = 0;
+        // 4 directions: right, down, downright, upright
+        int[][] dirs = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
+
+        for (int[] d : dirs) {
+            int count = 1; // Assume piece placed here
+            count += countDir(r, c, d[0], d[1], color);
+            count += countDir(r, c, -d[0], -d[1], color);
+
+            // Assign weights based on consecutive length
+            if (count >= 5) total += 100000;
+            else if (count == 4) total += 10000;
+            else if (count == 3) total += 1000;
+            else if (count == 2) total += 100;
+            else if (count == 1) total += 10;
+        }
+        return total;
+    }
+
+    // Count continuous pieces in one direction
+    private int countDir(int r, int c, int dr, int dc, int color) {
+        int cnt = 0;
+        for (int i = 1; i <= 4; i++) {
+            int nr = r + dr * i;
+            int nc = c + dc * i;
+
+            // Check bounds
+            if (nr < 0 || nr >= 15 || nc < 0 || nc >= 15) break;
+
+            if (isPlayer(board[nr][nc], color)) {
+                cnt++;
+            } else {
+                break; // Stop if blocked
+            }
+        }
+        return cnt;
+    }
 
     // Get what is at (r, c)
     public int getPiece(int r, int c) {
