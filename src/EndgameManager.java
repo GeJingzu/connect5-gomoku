@@ -47,9 +47,31 @@ public class EndgameManager {
             case 5: // Double Three Block
                 board[10][10] = 2; board[10][11] = 2; board[11][10] = 2; board[12][10] = 2;
                 break;
+            case 6: // Live Three Win
+                board[7][0] = 1; board[7][1] = 1; board[7][2] = 1;
+                break;
+            case 7: // Edge Case Defense
+                board[0][0] = 2; board[1][1] = 2; board[2][2] = 2;
+                break;
+            case 8: // Mixed Board
+                board[7][7] = 1; board[8][8] = 2; board[6][6] = 1; board[5][5] = 2;
+                break;
+            case 9: // Forbidden Move Test
+                board[12][12] = 1; board[12][13] = 1; board[13][12] = 1; board[14][12] = 1;
+                break;
+            case 10: // Final Challenge
+                board[1][1] = 2; board[1][2] = 2; board[1][3] = 2; board[2][1] = 1;
+                break;
             default:
                 System.out.println("Level not implemented yet.");
                 break;
+        }
+    }
+
+    //Stops the timer if the game ends early
+    public void stopCurrentChallenge() {
+        if (gameTimer != null) {
+            gameTimer.stop();
         }
     }
 }
