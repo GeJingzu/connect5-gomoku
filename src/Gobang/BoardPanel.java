@@ -392,6 +392,15 @@ class BoardPanel extends JPanel implements MouseListener {
         int mouseY = e.getY();
         System.out.println(mouseX + " " + mouseY);
 
+        //NetworkMode limitation
+        if (isNetworkMode) {
+            if ((network.isHost && logic.getCurrentTurn() != 1) ||
+                    (!network.isHost && logic.getCurrentTurn() != 2)) {
+                JOptionPane.showMessageDialog(this, "Not your turn!");
+                return;
+            }
+        }
+
         //'START' button
         if (e.getX() >= 19 && e.getX() <= 143 && e.getY() >= 137 && e.getY() <= 165) {
             JOptionPane.showMessageDialog(this, "Then the game starts now!");

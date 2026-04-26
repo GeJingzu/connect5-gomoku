@@ -32,6 +32,7 @@ public class Test {
                 break;
             }
         }
+        JOptionPane.showMessageDialog(null,"This game has single player mode and multiplayer mode. There are corresponding options to choose one of them to play. See help for specific tutorials.");
 
 
     }
