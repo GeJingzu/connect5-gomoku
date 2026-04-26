@@ -488,6 +488,21 @@ class BoardPanel extends JPanel implements MouseListener {
             return;
         }
 
+        //"HOST" BUTTON
+        if (e.getX() >= 18 && e.getX() <= 145 && e.getY() >= 387 && e.getY() <= 414) {
+
+            String portStr = JOptionPane.showInputDialog("Enter port:");
+            int port = Integer.parseInt(portStr);
+
+            if (network.hostGame(port)) {
+                JOptionPane.showMessageDialog(this, "Hosting... waiting for player");
+                isNetworkMode = true;
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to host");
+            }
+            return;
+        }
+
         //"END GAME(MODE)" BUTTON
         if(e.getX() >= 340 && e.getX() <= 418 && e.getY() >= 23 && e.getY() <= 48){
             clearBoard();
