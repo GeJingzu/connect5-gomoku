@@ -16,7 +16,7 @@ class BoardPanel extends JPanel implements MouseListener {
     private Gomokulogic logic; //Use logic class instead of local board array.
     private int cellSize = 380/(SIZE-1); //Size of each grid.
     private boolean canPlay = false;
-    private Image[] images = new Image[4];
+    private Image[] images = new Image[5];
     private NetworkManager network;
     private boolean isNetworkMode = false;
 
@@ -108,6 +108,7 @@ class BoardPanel extends JPanel implements MouseListener {
             images[1] = new ImageIcon(getClass().getResource("/images/Clock_picture.png")).getImage();
             images[2] = new ImageIcon(getClass().getResource("/images/Help_picture.png")).getImage();
             images[3] = new ImageIcon(getClass().getResource("/images/End_the_game_picture.png")).getImage();
+            images[4] = new ImageIcon(getClass().getResource("/images/Multiplayer_picture.png")).getImage();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -190,6 +191,7 @@ class BoardPanel extends JPanel implements MouseListener {
             g.drawImage(images[1], 585, 72, 22, 26, this); //set Clock picture.(next to 'Black time').
             g.drawImage(images[2],59,449,26,22,this); //set Help picture.
             g.drawImage(images[3],119,489,26,22,this); //set End the game picture.
+            g.drawImage(images[4],19,350,138,22,this);
 
         g.setColor(Color.BLACK);
         g.drawRect(217,70,200,28); //Make a rectangle(Whit time frame)
@@ -327,6 +329,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawString("RESTART THE GAME", 20, 205);
         g.drawString("ADMIT DEFEAT:", 28, 255);
         g.drawString("REPENTANCE(Undo)", 22, 306);
+        g.drawString("HOST", 61, 406);
 
         g.setColor(Color.RED);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 10));
