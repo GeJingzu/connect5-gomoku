@@ -25,33 +25,79 @@ public class NetworkManager {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
     }
-}
-// Host a game server
-public boolean hostGame(int port) {
-    try {
-        ServerSocket serverSocket = new ServerSocket(port);
-        System.out.println("Waiting for connection on port: " + port);
-        socket = serverSocket.accept();
-        isHost = true;
-        setupStreams();
-        // startListenerThread();
-        return true;
-    } catch (IOException e) {
-        e.printStackTrace();
-        return false;
-    }
-}
 
-// Join an existing game
-public boolean joinGame(String ip, int port) {
-    try {
-        socket = new Socket(ip, port);
-        isHost = false;
-        setupStreams();
-        // startListenerThread();
-        return true;
-    } catch (IOException e) {
-        e.printStackTrace();
-        return false;
+    // Host a game server
+    public boolean hostGame(int port) {
+        try {
+            ServerSocket serverSocket = new ServerSocket(port);
+            System.out.println("Waiting for connection on port: " + port);
+            socket = serverSocket.accept();
+            isHost = true;
+            setupStreams();
+            startListenerThread();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Join an existing game
+    public boolean joinGame(String ip, int port) {
+        try {
+            socket = new Socket(ip, port);
+            isHost = false;
+            setupStreams();
+            startListenerThread();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Send local move to opponent
+    public void sendMove(int r, int c, int color) {
+        if (out != null) {
+            out.println("MOVE," + r + "," + c + "," + color);
+        }
+    }
+
+    // Background thread to listen for incoming messages
+    private void startListenerThread() {
+        Thread listener = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String msg;
+                    // Keep reading lines from the network
+                    while ((msg = in.readLine()) != null) {
+                        handleMessage(msg);
+                    }
+                } catch (IOException e) {
+                    System.out.println("Network disconnected.");
+                }
+            }
+        });
+        listener.start();
+    }
+
+    // Process incoming strings
+    private void handleMessage(String msg) {
+        String[] parts = msg.split(",");
+
+        if (parts[0].equals("MOVE") && parts.length == 4) {
+            int r = Integer.parseInt(parts[1]);
+            int c = Integer.parseInt(parts[2]);
+            int color = Integer.parseInt(parts[3]);
+
+            // Apply the move to local board
+            logic.placePiece(r, c, color);
+
+            // Refresh the GUI
+            if (updateUI != null) {
+                updateUI.run();
+            }
+        }
     }
 }
