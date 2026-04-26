@@ -431,10 +431,17 @@ class BoardPanel extends JPanel implements MouseListener {
                 return;
             }
 
+            //Give you a pop-up window to choose the difficulty
+            String[] options = {"Easy", "Medium"};
+            int choice = JOptionPane.showOptionDialog(this,"Select AI Difficulty:","AI MODE",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,options,options[0]);
+            
+
             // Get the current turn (the chess pieces that AI should play in the current turn)
             int aiColor = logic.getCurrentTurn();
 
-            int[] aiMove = ai.makeMove(aiColor);
+            int[] aiMove = null;
+
+
 
             if (aiMove != null) {
                 repaint();
