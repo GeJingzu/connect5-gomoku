@@ -441,6 +441,17 @@ class BoardPanel extends JPanel implements MouseListener {
 
             int[] aiMove = null;
 
+            if (choice == 0) {
+                // Easy mode
+                aiMove = logic.easyAIMove(aiColor);
+            } else if (choice == 1) {
+                // Medium mode
+                aiMove = logic.mediumAIMove(aiColor);
+            } else {
+                // If user want close
+                return;
+            }
+
 
 
             if (aiMove != null) {
