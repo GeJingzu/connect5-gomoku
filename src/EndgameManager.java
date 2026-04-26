@@ -19,4 +19,23 @@ public class EndgameManager {
             }
         }
     }
+
+    // Level setup framework and timer integration
+    public void setupLevel(int levelId) {
+        // 1. Reset everything first
+        clearBoard();
+
+        // 2. Start/Restart the timer
+        if (gameTimer != null) {
+            gameTimer.start();
+        }
+
+        // 3. Switch logic for levels
+        switch (levelId) {
+            //Levels will be added in next step
+            default:
+                System.out.println("Level not implemented yet.");
+                break;
+        }
+    }
 }
