@@ -420,24 +420,38 @@ class BoardPanel extends JPanel implements MouseListener {
 
         //'HELP' button
         if (e.getX() >= 16 && e.getX() <= 53 && e.getY() >= 448 && e.getY() <= 471) {
-            JOptionPane.showMessageDialog(this, "=== Five Chess Game Help ===\n\n" +
-                    "【Game Rules】\n" +
-                    "• You need connect 5 pieces in a line, can be horizontal, vertical or diagonal, then you win\n" +
-                    "• Black chess always go first\n" +
-                    "• Every player has 5 minutes time, don't be too slow\n\n" +
-                    "【Button Functions】\n" +
-                    "• START - Begin a new game, let's play\n" +
-                    "• RESTART - Clear all chess and start again\n" +
-                    "• REPENTANCE - Take back your last step (now we have this function in Milestone 2)\n" +
-                    "• ADMIT DEFEAT - If you feel cannot win, you can admit lose\n" +
-                    "• END THE GAME - Close the game, goodbye\n\n" +
-                    "【Countdown】\n" +
-                    "• If your time finish, you will lose automatically\n" +
-                    "• Timer will change to another player by itself when turn changed\n\n" +
-                    "【Milestone 2 Updates】\n" +
-                    "• Undo function is ready to use now!\n" +
-                    "• Countdown timer is working good\n" +
-                    "• Game look more beautiful than before");
+            JOptionPane.showMessageDialog(this,
+                    "=== Gomoku Game Help ===\n\n" +
+
+                            "[Game Rules]\n" +
+                            "- The goal is to connect five pieces in one line.\n" +
+                            "- The line can be horizontal, vertical or diagonal.\n" +
+                            "- Black player always goes first.\n\n" +
+
+                            "[Game Functions]\n" +
+                            "- START: begin a new game.\n" +
+                            "- RESTART: clear the board and start again.\n" +
+                            "- REPENTANCE: undo your last move.\n" +
+                            "- ADMIT DEFEAT: you can give up the game.\n" +
+                            "- END THE GAME: exit the program.\n\n" +
+
+                            "[AI Mode]\n" +
+                            "- You can choose Easy or Medium difficulty.\n" +
+                            "- Easy AI plays randomly.\n" +
+                            "- Medium AI is more smart and will try to block you.\n\n" +
+
+                            "[Multiplayer]\n" +
+                            "- HOST: create a game and wait for another player.\n" +
+                            "- JOIN: enter IP and port to connect to host.\n" +
+                            "- In this mode, players take turns automatically.\n\n" +
+
+                            "[Timer]\n" +
+                            "- Each player has 5 minutes.\n" +
+                            "- If your time is over, you will lose the game.\n\n" +
+
+                            "Hope you enjoy the game :) :) :) ");
+
+
             return;
         }
 
