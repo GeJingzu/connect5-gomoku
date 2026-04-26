@@ -17,6 +17,8 @@ class BoardPanel extends JPanel implements MouseListener {
     private int cellSize = 380/(SIZE-1); //Size of each grid.
     private boolean canPlay = false;
     private Image[] images = new Image[4];
+    private NetworkManager network;
+    private boolean isNetworkMode = false;
 
     // Implementation of countdown function
     private int blackTime = 300; // The remaining time of black side (this is just the beginning), the initial is 5 minutes
