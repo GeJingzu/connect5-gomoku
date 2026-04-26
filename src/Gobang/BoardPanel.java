@@ -225,20 +225,20 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.fillRoundRect(18, 138, 128, 28, 15, 15);
 
         g.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(2)); // 2px
+        g2.setStroke(new BasicStroke(1)); // 2px
         g.drawRoundRect(18,138,128,28,15,15);
-        g.drawRect(15,447,40,26); //Make a rectangle(Help button)
-        g.drawRect(15,487,98,26); //Make a rectangle(End the game button)
-        g.drawRect(242,23,80,28); //Make a rectangle(AI MODE button)
-        g.drawRect(439,23,83,28); //Make a rectangle(Classic mode button)
-        g.drawRect(537,23,65,28); //Make a rectangle(Merge button)
-        g.drawRect(340,23,80,28); //Make a rectangle(END GAME button)
-        g.drawRect(18,185,128,28); //Make a rectangle(Restart the game button)
-        g.drawRect(18,287,128,28); //Make a rectangle(Repentance button)
-        g.drawRect(18,235,128,28); //Make a rectangle(Admit defeat button)
-        g.drawRect(18,138,128,28); //Make a rectangle(Start button)
+        //g.drawRect(15,447,40,26); //Make a rectangle(Help button)
+        //g.drawRect(15,487,98,26); //Make a rectangle(End the game button)
+        //g.drawRect(242,23,80,28); //Make a rectangle(AI MODE button)
+        //g.drawRect(439,23,83,28); //Make a rectangle(Classic mode button)
+        //g.drawRect(537,23,65,28); //Make a rectangle(Merge button)
+        //g.drawRect(340,23,80,28); //Make a rectangle(END GAME button)
+        //g.drawRect(18,185,128,28); //Make a rectangle(Restart the game button)
+        //g.drawRect(18,287,128,28); //Make a rectangle(Repentance button)
+        //g.drawRect(18,235,128,28); //Make a rectangle(Admit defeat button)
+        //g.drawRect(18,138,128,28); //Make a rectangle(Start button)
         Graphics2D g3 = (Graphics2D) g;
-        g3.setStroke(new BasicStroke(3));
+        g3.setStroke(new BasicStroke(2));
         g.setColor(Color.BLACK);
         g.drawRect(219,3,398,65); //Make a rectangle(Frame function box 1)
         g.drawRect(8,118,158,220); //Make a rectangle(Frame function box 2)
