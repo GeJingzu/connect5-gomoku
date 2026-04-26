@@ -100,6 +100,7 @@ class BoardPanel extends JPanel implements MouseListener {
     private MergeSystem mergeSystem;
 
     public BoardPanel() {
+        network = new NetworkManager(logic, this::repaint);
 
         //load picture
         try {
@@ -212,6 +213,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.drawRoundRect(18, 287, 128, 28, 15, 15);
         g2.drawRoundRect(18, 235, 128, 28, 15, 15);
         g2.drawRoundRect(18, 138, 128, 28, 15, 15);
+        g2.drawRoundRect(18, 387, 128, 28, 15, 15);
 
         g.setColor(new Color(0, 180, 180));
         //fill
@@ -225,6 +227,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.fillRoundRect(18, 287, 128, 28, 15, 15);
         g2.fillRoundRect(18, 235, 128, 28, 15, 15);
         g2.fillRoundRect(18, 138, 128, 28, 15, 15);
+        g2.fillRoundRect(18, 387, 128, 28, 15, 15);
 
         g.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(1)); // 2px
@@ -245,6 +248,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawRect(219,3,398,65); //Make a rectangle(Frame function box 1)
         g.drawRect(8,118,158,220); //Make a rectangle(Frame function box 2)
         g.drawRect(8,438,158,90); //Make a rectangle(Frame function box 3)
+        g.drawRect(8,343,158,90); //Make a rectangle(Frame function box 4)
 
         g.setColor(Color.BLACK);
         Graphics2D g4 = (Graphics2D) g;
