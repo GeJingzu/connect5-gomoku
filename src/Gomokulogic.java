@@ -62,7 +62,7 @@ public class Gomokulogic {
     }
     public boolean undo() {
         if (moveHistory.isEmpty()) {
-            return false; // 无棋可悔
+            return false;
         }
         int[] lastMove = moveHistory.pop();
         int r = lastMove[0];
@@ -70,11 +70,11 @@ public class Gomokulogic {
         int type = lastMove[3];
 
         if (type == 0) {
-            board[r][c] = 0; // 撤销普通落子
+            board[r][c] = 0;
         } else if (type == 1) {
-            board[r][c] -= 10; // 撤销融合落子
+            board[r][c] -= 10;
         }
-        switchTurn(); // 撤销回合
+        switchTurn();
         return true;
     }
 
