@@ -329,7 +329,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawString("RESTART THE GAME", 20, 205);
         g.drawString("ADMIT DEFEAT:", 28, 255);
         g.drawString("REPENTANCE(Undo)", 22, 306);
-        g.drawString("HOST", 61, 406);
+        g.drawString("HOST(Mutiplayer)", 30, 406);
 
         g.setColor(Color.RED);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 10));
