@@ -503,6 +503,23 @@ class BoardPanel extends JPanel implements MouseListener {
             return;
         }
 
+        //"JOIN" BUTTON
+        if (e.getX() >= 19 && e.getX() <= 156 && e.getY() >= 350 && e.getY() <= 370) {
+
+
+            String ip = JOptionPane.showInputDialog("Enter host IP:");
+            String portStr = JOptionPane.showInputDialog("Enter port:");
+            int port = Integer.parseInt(portStr);
+
+            if (network.joinGame(ip, port)) {
+                JOptionPane.showMessageDialog(this, "Connected!");
+                isNetworkMode = true;
+            } else {
+                JOptionPane.showMessageDialog(this, "Connection failed");
+            }
+            return;
+        }
+
         //"END GAME(MODE)" BUTTON
         if(e.getX() >= 340 && e.getX() <= 418 && e.getY() >= 23 && e.getY() <= 48){
             clearBoard();
@@ -614,6 +631,9 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         if (canPlace && logic.placePiece(row, col, currentColor)) {
+            if (isNetworkMode) {
+                network.sendMove(row, col, currentColor);
+            }
             repaint();
 
             // Check win
