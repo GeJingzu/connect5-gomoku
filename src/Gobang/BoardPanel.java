@@ -590,16 +590,6 @@ class BoardPanel extends JPanel implements MouseListener {
         }
 
         if (canPlace && logic.placePiece(row, col, currentColor)) {
-            if (canPlay) {
-                int aiColor = logic.getCurrentTurn();
-
-                int[] aiMove = logic.mediumAIMove(aiColor);
-
-                if (aiMove != null) {
-                    repaint();
-                    checkWinOrDraw(aiMove[0], aiMove[1], aiColor);
-                }
-            }
             repaint();
 
             // Check win
@@ -627,6 +617,18 @@ class BoardPanel extends JPanel implements MouseListener {
                 if (result == JOptionPane.YES_OPTION) {
                     clearBoard();
                     startNewGame();
+                }
+                return;
+            }
+            if (canPlay) {
+                int aiColor = logic.getCurrentTurn();
+
+                int[] aiMove = logic.mediumAIMove(aiColor);
+
+                if (aiMove != null) {
+                    repaint();
+
+                    checkWinOrDraw(aiMove[0], aiMove[1], aiColor);
                 }
             }
         }
