@@ -34,7 +34,7 @@ public boolean hostGame(int port) {
         socket = serverSocket.accept();
         isHost = true;
         setupStreams();
-        // startListenerThread(); // 先注释掉，下一部分才写
+        // startListenerThread();
         return true;
     } catch (IOException e) {
         e.printStackTrace();
@@ -48,7 +48,7 @@ public boolean joinGame(String ip, int port) {
         socket = new Socket(ip, port);
         isHost = false;
         setupStreams();
-        // startListenerThread(); // 先注释掉，下一部分才写
+        // startListenerThread();
         return true;
     } catch (IOException e) {
         e.printStackTrace();
