@@ -100,7 +100,6 @@ class BoardPanel extends JPanel implements MouseListener {
     private MergeSystem mergeSystem;
 
     public BoardPanel() {
-        network = new NetworkManager(logic, this::repaint);
 
         //load picture
         try {
@@ -117,6 +116,7 @@ class BoardPanel extends JPanel implements MouseListener {
         setBackground(Color.WHITE);
         this.addMouseListener(this);
         logic = new Gomokulogic();
+        network = new NetworkManager(logic, this::repaint);
         mergeSystem = new MergeSystem(logic);
         history = new HistoryManager(logic);
         ai = new SimpleAI(logic);

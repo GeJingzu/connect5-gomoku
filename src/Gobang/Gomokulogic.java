@@ -40,27 +40,66 @@ public class Gomokulogic {
 
     // Method to put a piece on the board
     public boolean placePiece(int r, int c, int color) {
-        // Check if the position is inside the 15x15 board
         if (r >= 0 && r < 15 && c >= 0 && c < 15) {
-            // Only place if the spot is empty (0)
+
             if (board[r][c] == 0) {
                 board[r][c] = color;
-                moveHistory.push(new int[]{r, c, color, 0}); // Record common drop
-                switchTurn(); // Switch round
+                moveHistory.push(new int[]{r, c, color, 0});
+
+                if (gameMode == 1) {
+                    applyMerge(r, c, color);
+                }
+
+                switchTurn();
                 return true;
+
             } else if (gameMode == 1 && board[r][c] == color) {
-                board[r][c] = color + 10;
-                moveHistory.push(new int[]{r, c, color, 1}); // Record fusion drop
-                switchTurn(); // Switch round
-                System.out.println("Success: Merged.");
+                moveHistory.push(new int[]{r, c, color, 1});
+
+                if (gameMode == 1) {
+                    applyMerge(r, c, color);
+                }
+
+                switchTurn();
                 return true;
+
             } else {
                 System.out.println("Error: Spot already taken.");
             }
         } else {
             System.out.println("Error: Out of bounds.");
         }
+
         return false;
+    }
+
+    //merge method
+    private void applyMerge(int row, int col, int color) {
+        int[][] board = this.board;
+
+        int[][] dirs = {{0,1},{1,0},{1,1},{1,-1}};
+
+        for (int[] d : dirs) {
+            int count = 1;
+
+            count += countDir(row, col, d[0], d[1], color);
+            count += countDir(row, col, -d[0], -d[1], color);
+
+            if (count >= 3) {
+                for (int dr = -1; dr <= 1; dr++) {
+                    for (int dc = -1; dc <= 1; dc++) {
+                        int nr = row + dr;
+                        int nc = col + dc;
+
+                        if (nr >= 0 && nr < 15 && nc >= 0 && nc < 15) {
+                            if (board[nr][nc] != 0 && board[nr][nc] != color) {
+                                board[nr][nc] = color; // 吃掉
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // Switch current round
