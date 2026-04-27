@@ -16,7 +16,7 @@ class BoardPanel extends JPanel implements MouseListener {
     private Gomokulogic logic; //Use logic class instead of local board array.
     private int cellSize = 380/(SIZE-1); //Size of each grid.
     private boolean canPlay = false;
-    private Image[] images = new Image[5];
+    private Image[] images = new Image[7];
     private NetworkManager network;
     private boolean isNetworkMode = false;
 
@@ -108,6 +108,8 @@ class BoardPanel extends JPanel implements MouseListener {
             images[2] = new ImageIcon(getClass().getResource("/images/Help_picture.png")).getImage();
             images[3] = new ImageIcon(getClass().getResource("/images/End_the_game_picture.png")).getImage();
             images[4] = new ImageIcon(getClass().getResource("/images/Multiplayer_picture.png")).getImage();
+            images[5] = new ImageIcon(getClass().getResource("/images/Arrow_picture.png")).getImage();
+            images[6] = new ImageIcon(getClass().getResource("/images/Arrow_picture2.png")).getImage();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,6 +194,8 @@ class BoardPanel extends JPanel implements MouseListener {
             g.drawImage(images[2],59,449,26,22,this); //set Help picture.
             g.drawImage(images[3],119,489,26,22,this); //set End the game picture.
             g.drawImage(images[4],19,350,138,22,this);
+            g.drawImage(images[5],266,518,53,20,this);
+            g.drawImage(images[6],432,518,53,20,this);
 
         g.setColor(Color.BLACK);
         g.drawRect(217,70,200,28); //Make a rectangle(Whit time frame)
@@ -216,6 +220,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.drawRoundRect(18, 235, 128, 28, 15, 15);
         g2.drawRoundRect(18, 138, 128, 28, 15, 15);
         g2.drawRoundRect(18, 387, 128, 28, 15, 15);
+        g2.drawRoundRect(316, 514, 120, 28, 15, 15);
 
         g.setColor(new Color(0, 180, 180));
         //fill
@@ -230,6 +235,8 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.fillRoundRect(18, 235, 128, 28, 15, 15);
         g2.fillRoundRect(18, 138, 128, 28, 15, 15);
         g2.fillRoundRect(18, 387, 128, 28, 15, 15);
+        g.setColor(Color.LIGHT_GRAY);
+        g2.fillRoundRect(316, 514, 120, 28, 15, 15);
 
         g.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(1)); // 2px
@@ -330,6 +337,10 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawString("ADMIT DEFEAT:", 28, 255);
         g.drawString("REPENTANCE(Undo)", 22, 306);
         g.drawString("HOST(Mutiplayer)", 30, 406);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 13));
+        g.drawString("Turn off AI mode", 322, 532);
+
 
         g.setColor(Color.RED);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 10));
