@@ -93,7 +93,7 @@ public class Gomokulogic {
 
                         if (nr >= 0 && nr < 15 && nc >= 0 && nc < 15) {
                             if (board[nr][nc] != 0 && board[nr][nc] != color) {
-                                board[nr][nc] = color; // 吃掉
+                                board[nr][nc] = color;
                             }
                         }
                     }
