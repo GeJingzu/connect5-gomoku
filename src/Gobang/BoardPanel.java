@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 
 //A panel class responsible for drawing checkerboards and handling mouse events.
 class BoardPanel extends JPanel implements MouseListener {
+    private boolean aiEnabled = false;
     private static final int SIZE = 15; //Chessboard 15*15.
     private Gomokulogic logic; //Use logic class instead of local board array.
     private int cellSize = 380/(SIZE-1); //Size of each grid.
@@ -194,8 +195,8 @@ class BoardPanel extends JPanel implements MouseListener {
             g.drawImage(images[2],59,449,26,22,this); //set Help picture.
             g.drawImage(images[3],119,489,26,22,this); //set End the game picture.
             g.drawImage(images[4],19,350,138,22,this);
-            g.drawImage(images[5],266,518,53,20,this);
-            g.drawImage(images[6],432,518,53,20,this);
+            g.drawImage(images[5],222,510,53,20,this);
+            g.drawImage(images[6],385,510,53,20,this);
 
         g.setColor(Color.BLACK);
         g.drawRect(217,70,200,28); //Make a rectangle(Whit time frame)
@@ -220,7 +221,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.drawRoundRect(18, 235, 128, 28, 15, 15);
         g2.drawRoundRect(18, 138, 128, 28, 15, 15);
         g2.drawRoundRect(18, 387, 128, 28, 15, 15);
-        g2.drawRoundRect(316, 514, 120, 28, 15, 15);
+        g2.drawRoundRect(270, 506, 120, 28, 15, 15);
 
         g.setColor(new Color(0, 180, 180));
         //fill
@@ -236,7 +237,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g2.fillRoundRect(18, 138, 128, 28, 15, 15);
         g2.fillRoundRect(18, 387, 128, 28, 15, 15);
         g.setColor(Color.LIGHT_GRAY);
-        g2.fillRoundRect(316, 514, 120, 28, 15, 15);
+        g2.fillRoundRect(270, 506, 120, 28, 15, 15);
 
         g.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(1)); // 2px
@@ -339,7 +340,7 @@ class BoardPanel extends JPanel implements MouseListener {
         g.drawString("HOST(Mutiplayer)", 30, 406);
         g.setColor(Color.BLACK);
         g.setFont(new Font("Microsoft YaHei", Font.BOLD, 13));
-        g.drawString("Turn off AI mode", 322, 532);
+        g.drawString("Turn off AI mode", 275, 525);
 
 
         g.setColor(Color.RED);
@@ -482,24 +483,14 @@ class BoardPanel extends JPanel implements MouseListener {
             // Get the current turn (the chess pieces that AI should play in the current turn)
             int aiColor = logic.getCurrentTurn();
 
-            int[] aiMove = null;
-
             if (choice == 0) {
-                // Easy mode
-                aiMove = logic.easyAIMove(aiColor);
+                aiEnabled = true;
+                JOptionPane.showMessageDialog(this, "Easy AI Enabled");
             } else if (choice == 1) {
-                // Medium mode
-                aiMove = logic.mediumAIMove(aiColor);
+                aiEnabled = true;
+                JOptionPane.showMessageDialog(this, "Medium AI Enabled");
             } else {
-                // If user want close
                 return;
-            }
-
-
-
-            if (aiMove != null) {
-                repaint();
-                checkWinOrDraw(aiMove[0], aiMove[1], aiColor);
             }
             return;
         }
@@ -591,6 +582,13 @@ class BoardPanel extends JPanel implements MouseListener {
                     JOptionPane.showMessageDialog(this, "Failed to load endgame file!\nPlease check file format.");
                 }
             }
+            return;
+        }
+
+        //"Turn off AI Mode" BUTTON
+        if (e.getX() >= 271 && e.getX() <= 388 && e.getY() >= 506 && e.getY() <= 532) {
+            aiEnabled = false;
+            JOptionPane.showMessageDialog(this, "AI Mode is OFF. Now Player vs Player.");
             return;
         }
 
@@ -698,7 +696,7 @@ class BoardPanel extends JPanel implements MouseListener {
                 }
                 return;
             }
-            if (canPlay) {
+            if (canPlay && aiEnabled) {
                 int aiColor = logic.getCurrentTurn();
 
                 int[] aiMove = logic.mediumAIMove(aiColor);
