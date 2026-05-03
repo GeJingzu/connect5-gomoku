@@ -74,6 +74,19 @@ public class GomokulogicTest {
         assertFalse(logic.isFull());
     }
 
+    @Test
+    public void testIsFullTrue() { //Test: The chessboard is empty by default
+        Gomokulogic logic = new Gomokulogic();
+
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                logic.setPiece(i, j, 1);
+            }
+        }
+
+        assertTrue(logic.isFull());
+    }
+
 
 
 
