@@ -67,6 +67,13 @@ public class GomokulogicTest {
 
     }
 
+    @Test
+    public void testIsFullFalse() {
+        Gomokulogic logic = new Gomokulogic();
+
+        assertFalse(logic.isFull());
+    }
+
 
 
 
