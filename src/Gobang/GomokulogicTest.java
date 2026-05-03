@@ -52,6 +52,17 @@ public class GomokulogicTest {
         assertTrue(logic.checkWin(2, 2, 1));
     }
 
+    @Test
+    public void testUndo() { //Did undo really withdraw the pieces
+        Gomokulogic logic = new Gomokulogic();
+
+        logic.placePiece(0, 0, 1); //Play a black chess at (0,0)
+        logic.undo(); //Call Undo
+
+        assertEquals(0, logic.getPiece(0, 0)); //Check ''I hope this position is currently empty (0).''
+    }
+
+
 
 
 
