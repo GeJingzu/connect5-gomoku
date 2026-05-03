@@ -62,6 +62,11 @@ public class GomokulogicTest {
         assertEquals(0, logic.getPiece(0, 0)); //Check ''I hope this position is currently empty (0).''
     }
 
+    @Test public void testGetPieceDefault() { //process:1.I just created a chessboard.2.Nothing was taken down.3.Any position should be empty
+        Gomokulogic logic = new Gomokulogic();
+
+    }
+
 
 
 
