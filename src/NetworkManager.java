@@ -84,6 +84,8 @@ public class NetworkManager {
 
     // Process incoming strings
     private void handleMessage(String msg) {
+        System.out.println("[Network Rx] " + msg);
+
         String[] parts = msg.split(",");
 
         if (parts[0].equals("MOVE") && parts.length == 4) {
@@ -91,13 +93,18 @@ public class NetworkManager {
             int c = Integer.parseInt(parts[2]);
             int color = Integer.parseInt(parts[3]);
 
-            // Apply the move to local board
+            // Apply move
             logic.placePiece(r, c, color);
 
-            // Refresh the GUI
-            if (updateUI != null) {
-                updateUI.run();
-            }
+        } else if (parts[0].equals("UNDO")) {
+            logic.undo();
+        } else if (parts[0].equals("RESTART")) {
+            logic.resetBoard();
+        }
+
+        // Refresh UI
+        if (updateUI != null) {
+            updateUI.run();
         }
     }
 }
